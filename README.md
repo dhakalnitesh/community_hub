@@ -1,13 +1,11 @@
-# 🎓 GMC Backbenchers
+# 🎓 EduVoice
 
 ![Laravel](https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white)
 ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
 ![Inertia.js](https://img.shields.io/badge/Inertia.js-9553E9?style=for-the-badge&logo=inertia&logoColor=white)
 ![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
-![PHP](https://img.shields.io/badge/PHP-777BB4?style=for-the-badge&logo=php&logoColor=white)
-![SQLite](https://img.shields.io/badge/SQLite-07405E?style=for-the-badge&logo=sqlite&logoColor=white)
 
-> **GMC Backbenchers** is a modern, collaborative educational ecosystem designed to empower students, teachers, and institution administrators. By seamlessly blending academic management with vibrant community engagement, the platform cultivates an enriching environment for learning, peer mentorship, and open discourse.
+> **EduVoice** is a modern, collaborative educational ecosystem designed to empower students, teachers, and institution administrators. Built for the **GMC Internal Hackathon 2026** under the theme *"Empowering Education Through Technology"*, EduVoice removes psychological barriers in the classroom through tracked anonymous interactions and transparent grievance management.
 
 ## 📖 Table of Contents
 
@@ -15,34 +13,37 @@
 - [Key Features](#-key-features)
 - [Technology Stack](#️-technology-stack)
 - [Getting Started](#-getting-started)
-- [Testing](#-testing)
-- [Contributing & Security](#-contributing--security)
 - [License](#-license)
 
 ---
 
 ## 🌟 Overview
 
-GMC Backbenchers bridges the traditional gap between formal classroom management and informal community interaction. Our platform not only equips educators with robust tools for academic tracking but also empowers students to collaborate, seek mentorship, showcase their talents, and engage in meaningful discussions.
+EduVoice bridges the gap between formal classroom management and informal student engagement. Our platform tackles the core issue of student hesitation in Nepali classrooms by providing a safe, anonymous, yet accountable way to ask questions and report grievances.
 
-Built with a powerful **Laravel** backend and a highly dynamic, reactive **React** frontend (powered by **Inertia.js**), the application offers a seamless single-page application (SPA) experience without the complexity of traditional API routing.
+Built with a powerful **Laravel 12** backend and a highly dynamic, reactive **React 18** frontend (powered by **Inertia.js**), the application offers a premium, modern single-page application (SPA) experience.
 
 ---
 
 ## 🚀 Key Features
 
 ### 🏢 Institutional Management
-- **Multi-Tenant Architecture:** Secure, logical separation of data—including semesters, subjects, and students—across different institutions.
-- **Advanced Role-Based Access Control (RBAC):** Fine-grained permission handling powered by Spatie. Custom experiences and safeguards for Super Admins, Institution Admins, Teachers, and Students.
+- **Multi-Tenant Architecture:** Secure separation of data (semesters, subjects, students) across different institutions.
+- **Advanced Role-Based Access Control (RBAC):** Powered by Spatie. Custom dashboards and scoped data views for Super Admins, Institution Admins, Teachers, and Students.
+
+### 🗣️ Trackable Anonymous Q&A (Hero Feature)
+- **Barrier-Free Learning:** Students can ask questions anonymously to avoid peer judgment.
+- **Tracking Tokens:** When a student posts anonymously, they receive a unique tracking token (e.g., `QA-X8H2B1`) which allows them to track answers and replies without exposing their identity.
+- **Persistent Pseudonyms:** Anonymous users are assigned fun, persistent pseudonyms (e.g., *CuriousPanda42*) to build a safe reputation over time.
+
+### 🚨 Grievance Management System
+- **Transparent Reporting:** Students can report institutional or academic grievances.
+- **Integrated Modals:** Seamless "Submit Grievance" and "Track Grievance" modals directly on the feed—no jarring page reloads.
+- **Evidence Uploads:** Support for photo and video attachments when reporting issues.
 
 ### 📚 Academic & Classroom Tools
-- **Assignment Lifecycle Management:** Comprehensive workflow for creating assignments, handling late submissions, and facilitating teacher grading and feedback.
-- **Activity & Engagement Tracking:** Built-in logging to monitor student participation and academic engagement over time.
-
-### 🤝 Community & Collaboration
-- **Interactive Q&A Forum:** A dynamic, StackOverflow-style discussion board supporting subject-specific queries, general discussions, anonymous posting, and robust upvote/downvote mechanics.
-- **Peer-to-Peer Mentorship:** A dedicated mentorship board allowing students to seek guidance, share knowledge, and earn Gamified Mentor Badges.
-- **Student Talent Showcase:** A personalized portfolio system enabling students to publish, share, and discover inspiring personal projects.
+- **Assignment Lifecycle Management:** Workflow for creating assignments, handling submissions, and facilitating teacher grading.
+- **Teacher Engagement Insights:** Chart.js-powered dashboards showing teachers the impact of anonymous engagement vs. public engagement.
 
 ---
 
@@ -50,28 +51,15 @@ Built with a powerful **Laravel** backend and a highly dynamic, reactive **React
 
 | Category | Technologies |
 | :--- | :--- |
-| **Backend Framework** | Laravel 11.x (PHP 8.2+) |
-| **Frontend Framework** | React 18, Inertia.js |
-| **Styling** | TailwindCSS |
-| **Database** | SQLite (Dev/Testing), MySQL / PostgreSQL (Production) |
-| **Authentication** | Laravel Breeze (Session-based) |
+| **Backend** | Laravel 12.x (PHP 8.2+) |
+| **Frontend** | React 18, Inertia.js |
+| **Styling** | TailwindCSS, Chart.js |
+| **Database** | MySQL |
 | **Authorization** | Spatie Laravel Permission |
 
 ---
 
 ## ⚙️ Getting Started
-
-Follow these steps to set up the project locally for development and testing.
-
-### Prerequisites
-
-Ensure you have the following installed on your machine:
-- **PHP** (8.2 or higher)
-- **Composer**
-- **Node.js** & **npm** (or yarn/pnpm)
-- **SQLite** (or your preferred relational database)
-
-### Installation Steps
 
 1. **Clone the Repository:**
    ```bash
@@ -79,70 +67,31 @@ Ensure you have the following installed on your machine:
    cd gmc_backbenchers
    ```
 
-2. **Install PHP Dependencies:**
+2. **Install Dependencies:**
    ```bash
    composer install
-   ```
-
-3. **Install JavaScript Dependencies:**
-   ```bash
    npm install
    ```
 
-4. **Environment Configuration:**
+3. **Environment Configuration:**
    ```bash
    cp .env.example .env
    php artisan key:generate
    ```
-   > **Note:** Ensure your `.env` file is properly configured. By default, you can utilize SQLite by creating an empty `database/database.sqlite` file.
 
-5. **Run Migrations & Seeders:**
+4. **Run Migrations & Seeders:**
    ```bash
-   php artisan migrate --seed
+   php artisan migrate:fresh --seed
    ```
-   > **Note:** The seeders will populate your database with essential default roles, permissions, and initial test data.
+   > *Note: Seeders will populate your database with essential roles, demo users, and realistic test data.*
 
-6. **Start the Development Servers:**
+5. **Start the Development Servers:**
+   Terminal 1: `php artisan serve`
+   Terminal 2: `npm run dev`
 
-   You will need two terminal instances to run the backend and frontend simultaneously.
-
-   **Terminal 1 (Laravel API):**
-   ```bash
-   php artisan serve
-   ```
-
-   **Terminal 2 (Vite HMR):**
-   ```bash
-   npm run dev
-   ```
-
-7. **Access the Application:**  
-   Open your browser and navigate to [http://localhost:8000](http://localhost:8000).
-
----
-
-## 🧪 Testing
-
-The platform includes a robust automated test suite built with **PHPUnit**. It ensures that data integrity, authorization constraints, and core feature functionality remain intact during development.
-
-To execute the test suite, run:
-```bash
-php artisan test
-```
-
-> **Note:** The tests utilize an in-memory SQLite database via the `RefreshDatabase` trait. Ensure your environment supports SQLite testing.
-
----
-
-## 🛡️ Contributing & Security
-
-We welcome contributions! If you would like to contribute, please fork the repository and submit a pull request with your proposed changes.
-
-**Security Vulnerabilities:**  
-If you discover a security vulnerability within GMC Backbenchers, please send an email to the repository maintainers directly rather than creating a public issue. All security vulnerabilities will be promptly and carefully addressed.
+6. **Access:** Navigate to `http://localhost:8000`
 
 ---
 
 ## 📄 License
-
-GMC Backbenchers is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+EduVoice is open-sourced software licensed under the MIT license.
