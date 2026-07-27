@@ -13,7 +13,7 @@ class StudentProjectController extends Controller
         // For the demo, we show all published projects in the current user's institution
         $institutionId = $request->user()->institutions()->first()?->id;
 
-        $projects = StudentProject::with('user:id,name')
+        $projects = StudentProject::with(['user:id,name', 'reviews.user:id,name'])
             ->when($institutionId, fn($q) => $q->where('institution_id', $institutionId))
             ->where('status', 'published')
             ->latest()

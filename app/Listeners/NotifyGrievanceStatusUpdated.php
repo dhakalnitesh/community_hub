@@ -2,11 +2,13 @@
 
 namespace App\Listeners;
 
+use Illuminate\Contracts\Queue\ShouldQueue;
+
 use App\Enums\NotificationType;
 use App\Events\GrievanceStatusUpdated;
 use App\Services\NotificationService;
 
-class NotifyGrievanceStatusUpdated
+class NotifyGrievanceStatusUpdated implements ShouldQueue
 {
     public function __construct(
         protected NotificationService $notificationService,

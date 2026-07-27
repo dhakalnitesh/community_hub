@@ -2,11 +2,13 @@
 
 namespace App\Listeners;
 
+use Illuminate\Contracts\Queue\ShouldQueue;
+
 use App\Enums\NotificationType;
 use App\Events\AssignmentGraded;
 use App\Services\NotificationService;
 
-class NotifyAssignmentGraded
+class NotifyAssignmentGraded implements ShouldQueue
 {
     public function __construct(
         protected NotificationService $notificationService,

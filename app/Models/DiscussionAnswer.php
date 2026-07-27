@@ -16,6 +16,7 @@ class DiscussionAnswer extends Model
         'body',
         'is_anonymous',
         'is_accepted',
+        'is_teacher_endorsed',
     ];
 
     protected function casts(): array
@@ -23,6 +24,7 @@ class DiscussionAnswer extends Model
         return [
             'is_anonymous' => 'boolean',
             'is_accepted' => 'boolean',
+            'is_teacher_endorsed' => 'boolean',
         ];
     }
 

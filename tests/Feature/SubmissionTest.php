@@ -114,9 +114,9 @@ class SubmissionTest extends TestCase
         $this->actingAs($this->student)
             ->post(route('assignments.submissions.store', $this->assignment), [
                 'content' => '',
-                'file_url' => '',
+                'files' => [],
             ])
-            ->assertSessionHasErrors(['content', 'file_url']);
+            ->assertSessionHasErrors(['content', 'files']);
     }
 
     // === Late Submission ===

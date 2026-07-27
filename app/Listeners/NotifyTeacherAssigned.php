@@ -2,11 +2,13 @@
 
 namespace App\Listeners;
 
+use Illuminate\Contracts\Queue\ShouldQueue;
+
 use App\Enums\NotificationType;
 use App\Events\TeacherAssigned;
 use App\Services\NotificationService;
 
-class NotifyTeacherAssigned
+class NotifyTeacherAssigned implements ShouldQueue
 {
     public function __construct(
         protected NotificationService $notificationService,

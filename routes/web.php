@@ -119,13 +119,15 @@ Route::middleware('auth')->prefix('questions')->name('questions.')->group(functi
     Route::put('/answers/{answer}', [DiscussionAnswerController::class, 'update'])->name('answers.update');
     Route::delete('/answers/{answer}', [DiscussionAnswerController::class, 'destroy'])->name('answers.destroy');
     Route::post('/answers/{answer}/accept', [DiscussionAnswerController::class, 'accept'])->name('answers.accept');
+    Route::post('/answers/{answer}/endorse', [DiscussionAnswerController::class, 'endorse'])->name('answers.endorse');
 
     Route::post('/vote', [VoteController::class, 'toggle'])->middleware('throttle:60,1')->name('vote');
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/talent-showcase', [StudentProjectController::class, 'index'])->name('projects.index');
-    Route::post('/talent-showcase', [StudentProjectController::class, 'store'])->name('projects.store');
+    Route::post('/talent-showcase', [\App\Http\Controllers\StudentProjectController::class, 'store'])->name('projects.store');
+    Route::post('/projects/{project}/reviews', [\App\Http\Controllers\ProjectReviewController::class, 'store'])->name('projects.reviews.store');
     
     Route::get('/mentor-board', [MentorSessionController::class, 'index'])->name('mentorship.index');
     Route::post('/mentor-sessions/{mentorSession}/accept', [MentorSessionController::class, 'accept'])->name('mentorship.accept');

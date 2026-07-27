@@ -83,4 +83,22 @@ class DiscussionAnswerController extends Controller
         return redirect()->route('questions.show', $discussion)
             ->with('success', 'Answer status updated.');
     }
+
+    public function endorse(DiscussionAnswer $answer)
+    {
+        $this->authorize('endorse', $answer);
+
+        $answer->update(['is_teacher_endorsed' => !$answer->is_teacher_endorsed]);
+
+        if ($answer->is_teacher_endorsed) {
+            $answer->user->increment('reputation', 10);
+            $message = 'Answer explicitly endorsed by teacher. +10 Reputation awarded to the student.';
+        } else {
+            $answer->user->decrement('reputation', 10);
+            $message = 'Teacher endorsement removed. -10 Reputation from the student.';
+        }
+        
+        return redirect()->route('questions.show', $answer->discussion)
+            ->with('success', $message);
+    }
 }

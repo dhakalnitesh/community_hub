@@ -2,12 +2,14 @@
 
 namespace App\Listeners;
 
+use Illuminate\Contracts\Queue\ShouldQueue;
+
 use App\Enums\NotificationType;
 use App\Events\QuestionPosted;
 use App\Services\NotificationService;
 use App\Models\Subject;
 
-class NotifyQuestionPosted
+class NotifyQuestionPosted implements ShouldQueue
 {
     public function __construct(
         protected NotificationService $notificationService,

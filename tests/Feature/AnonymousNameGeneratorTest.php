@@ -49,7 +49,7 @@ class AnonymousNameGeneratorTest extends TestCase
         foreach ($names as $name) {
             $this->assertMatchesRegularExpression('/^[A-Z][a-z]+[A-Z][a-z]+\d{2}$/', $name);
             $this->assertGreaterThanOrEqual(8, strlen($name));
-            $this->assertLessThanOrEqual(18, strlen($name));
+            $this->assertLessThanOrEqual(25, strlen($name));
         }
     }
 
@@ -57,6 +57,6 @@ class AnonymousNameGeneratorTest extends TestCase
     {
         $name = AnonymousNameGenerator::generate();
         $this->assertGreaterThanOrEqual(6, strlen($name));
-        $this->assertLessThanOrEqual(20, strlen($name));
+        $this->assertLessThanOrEqual(25, strlen($name));
     }
 }

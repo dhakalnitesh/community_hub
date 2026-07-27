@@ -21,6 +21,10 @@ export default function AnswerCard({ answer, discussionUserId, canAccept }) {
         router.post(route('questions.answers.accept', answer.id));
     };
 
+    const handleEndorse = () => {
+        router.post(route('questions.answers.endorse', answer.id));
+    };
+
     const handleUpdate = (e) => {
         e.preventDefault();
         router.put(route('questions.answers.update', answer.id), {
@@ -45,9 +49,15 @@ export default function AnswerCard({ answer, discussionUserId, canAccept }) {
 
                 <div className="flex-1 min-w-0">
                     {answer.is_accepted && (
-                        <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-green-500 text-white rounded-lg text-xs font-bold uppercase tracking-wider mb-4 shadow-sm">
+                        <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-green-500 text-white rounded-lg text-xs font-bold uppercase tracking-wider mb-4 shadow-sm mr-2">
                             <span className="material-symbols-outlined text-[14px]">verified</span>
                             Accepted Answer
+                        </div>
+                    )}
+                    {answer.is_teacher_endorsed && (
+                        <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-primary text-white rounded-lg text-xs font-bold uppercase tracking-wider mb-4 shadow-sm">
+                            <span className="material-symbols-outlined text-[14px]">stars</span>
+                            Teacher Endorsed
                         </div>
                     )}
 
@@ -95,6 +105,16 @@ export default function AnswerCard({ answer, discussionUserId, canAccept }) {
                             {canAccept && answer.is_accepted && (
                                 <button onClick={handleAccept} className="px-3 py-1.5 rounded-lg text-xs font-bold text-yellow-700 bg-yellow-500/10 hover:bg-yellow-500/20 transition-colors flex items-center gap-1">
                                     <span className="material-symbols-outlined text-[14px]">close</span> Unaccept
+                                </button>
+                            )}
+                            {answer.permissions?.endorse && !answer.is_teacher_endorsed && (
+                                <button onClick={handleEndorse} className="px-3 py-1.5 rounded-lg text-xs font-bold text-primary bg-primary/10 hover:bg-primary/20 transition-colors flex items-center gap-1">
+                                    <span className="material-symbols-outlined text-[14px]">stars</span> Endorse
+                                </button>
+                            )}
+                            {answer.permissions?.endorse && answer.is_teacher_endorsed && (
+                                <button onClick={handleEndorse} className="px-3 py-1.5 rounded-lg text-xs font-bold text-yellow-700 bg-yellow-500/10 hover:bg-yellow-500/20 transition-colors flex items-center gap-1">
+                                    <span className="material-symbols-outlined text-[14px]">close</span> Unendorse
                                 </button>
                             )}
                             {canUpdate && !isEditing && (

@@ -200,6 +200,7 @@ class DiscussionController extends Controller
             $answer->permissions = [
                 'update' => $user->can('update', $answer),
                 'delete' => $user->can('delete', $answer),
+                'endorse' => $user->can('endorse', $answer),
             ];
             return $answer;
         });
