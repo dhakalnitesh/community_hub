@@ -96,6 +96,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/projects/{project}/reviews', [App\Http\Controllers\Mentorship\ProjectReviewController::class, 'store'])->name('projects.reviews.store');
     
     Route::get('/mentor-board', [MentorSessionController::class, 'index'])->name('mentorship.index');
+    Route::post('/mentor-sessions', [MentorSessionController::class, 'store'])->name('mentorship.store');
     Route::post('/mentor-sessions/{mentorSession}/accept', [MentorSessionController::class, 'accept'])->name('mentorship.accept');
     Route::post('/mentor-sessions/{mentorSession}/complete', [MentorSessionController::class, 'complete'])->name('mentorship.complete');
 });

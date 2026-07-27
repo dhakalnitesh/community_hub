@@ -19,6 +19,15 @@ export default function Show({ discussion, permissions }) {
         }
     };
 
+    const handleRequestMentor = () => {
+        if (confirm('Would you like to request a senior student to mentor you on this topic?')) {
+            router.post(route('mentorship.store'), {
+                discussion_id: discussion.id,
+                topic: discussion.title
+            });
+        }
+    };
+
     const handleSubmitAnswer = (e) => {
         e.preventDefault();
         router.post(route('questions.answers.store', discussion.id), {
@@ -53,9 +62,14 @@ export default function Show({ discussion, permissions }) {
                     </Link>
                     <div className="flex items-center gap-4">
                         {isOwner && (
-                            <Link href={route('questions.edit', discussion.id)} className="text-on-surface-variant hover:text-primary font-bold flex items-center gap-1 transition-colors text-sm">
-                                <span className="material-symbols-outlined text-[18px]">edit</span> Edit
-                            </Link>
+                            <>
+                                <button onClick={handleRequestMentor} className="text-primary hover:text-primary/80 font-bold flex items-center gap-1 transition-colors text-sm px-3 py-1 bg-primary/10 rounded-full">
+                                    <span className="material-symbols-outlined text-[18px]">handshake</span> Request Mentor
+                                </button>
+                                <Link href={route('questions.edit', discussion.id)} className="text-on-surface-variant hover:text-primary font-bold flex items-center gap-1 transition-colors text-sm">
+                                    <span className="material-symbols-outlined text-[18px]">edit</span> Edit
+                                </Link>
+                            </>
                         )}
                         {canDelete && (
                             <button onClick={handleDelete} className="text-error/80 hover:text-error font-bold flex items-center gap-1 transition-colors text-sm">

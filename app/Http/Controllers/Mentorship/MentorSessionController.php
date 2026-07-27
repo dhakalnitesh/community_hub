@@ -32,6 +32,28 @@ class MentorSessionController extends Controller
         ]);
     }
 
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'discussion_id' => 'required|exists:discussions,id',
+            'topic' => 'required|string|max:255',
+        ]);
+
+        // Ensure not already requested
+        if (MentorSession::where('discussion_id', $validated['discussion_id'])->exists()) {
+            return back()->withErrors(['message' => 'A mentor has already been requested for this discussion.']);
+        }
+
+        MentorSession::create([
+            'discussion_id' => $validated['discussion_id'],
+            'mentee_id' => $request->user()->id,
+            'topic' => $validated['topic'],
+            'status' => 'requested',
+        ]);
+
+        return back()->with('success', 'Mentor request submitted successfully!');
+    }
+
     public function accept(Request $request, MentorSession $mentorSession)
     {
         $this->authorize('accept', $mentorSession);
