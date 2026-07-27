@@ -2,8 +2,8 @@
 
 namespace App\Policies;
 
-use App\Models\MentorSession;
-use App\Models\User;
+use App\Models\Mentorship\MentorSession;
+use App\Models\Core\User;
 
 class MentorSessionPolicy
 {

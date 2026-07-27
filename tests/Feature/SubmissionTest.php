@@ -2,12 +2,12 @@
 
 namespace Tests\Feature;
 
-use App\Models\Assignment;
-use App\Models\Institution;
-use App\Models\Section;
-use App\Models\Semester;
-use App\Models\Subject;
-use App\Models\User;
+use App\Models\Academic\Assignment;
+use App\Models\Core\Institution;
+use App\Models\Academic\Section;
+use App\Models\Academic\Semester;
+use App\Models\Academic\Subject;
+use App\Models\Core\User;
 use Database\Seeders\RolesAndPermissionsSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -163,7 +163,7 @@ class SubmissionTest extends TestCase
 
     public function test_student_can_view_own_submission(): void
     {
-        $submission = \App\Models\Submission::factory()->create([
+        $submission = \App\Models\Academic\Submission::factory()->create([
             'assignment_id' => $this->assignment->id,
             'student_id' => $this->student->id,
         ]);
@@ -178,7 +178,7 @@ class SubmissionTest extends TestCase
 
     public function test_other_student_cannot_view_submission(): void
     {
-        $submission = \App\Models\Submission::factory()->create([
+        $submission = \App\Models\Academic\Submission::factory()->create([
             'assignment_id' => $this->assignment->id,
             'student_id' => $this->student->id,
         ]);
@@ -190,7 +190,7 @@ class SubmissionTest extends TestCase
 
     public function test_teacher_can_view_submission_for_their_assignment(): void
     {
-        $submission = \App\Models\Submission::factory()->create([
+        $submission = \App\Models\Academic\Submission::factory()->create([
             'assignment_id' => $this->assignment->id,
             'student_id' => $this->student->id,
         ]);
@@ -207,7 +207,7 @@ class SubmissionTest extends TestCase
 
     public function test_teacher_can_grade_submission(): void
     {
-        $submission = \App\Models\Submission::factory()->create([
+        $submission = \App\Models\Academic\Submission::factory()->create([
             'assignment_id' => $this->assignment->id,
             'student_id' => $this->student->id,
         ]);
@@ -234,7 +234,7 @@ class SubmissionTest extends TestCase
         $otherTeacher = User::factory()->teacher()->create();
         $otherTeacher->assignRole('teacher');
 
-        $submission = \App\Models\Submission::factory()->create([
+        $submission = \App\Models\Academic\Submission::factory()->create([
             'assignment_id' => $this->assignment->id,
             'student_id' => $this->student->id,
         ]);
@@ -249,7 +249,7 @@ class SubmissionTest extends TestCase
 
     public function test_student_cannot_grade(): void
     {
-        $submission = \App\Models\Submission::factory()->create([
+        $submission = \App\Models\Academic\Submission::factory()->create([
             'assignment_id' => $this->assignment->id,
             'student_id' => $this->student->id,
         ]);
@@ -264,7 +264,7 @@ class SubmissionTest extends TestCase
 
     public function test_score_cannot_exceed_max_score(): void
     {
-        $submission = \App\Models\Submission::factory()->create([
+        $submission = \App\Models\Academic\Submission::factory()->create([
             'assignment_id' => $this->assignment->id,
             'student_id' => $this->student->id,
         ]);
@@ -279,7 +279,7 @@ class SubmissionTest extends TestCase
 
     public function test_score_must_be_positive(): void
     {
-        $submission = \App\Models\Submission::factory()->create([
+        $submission = \App\Models\Academic\Submission::factory()->create([
             'assignment_id' => $this->assignment->id,
             'student_id' => $this->student->id,
         ]);

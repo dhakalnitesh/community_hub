@@ -3,9 +3,9 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\StudentProject;
-use App\Models\User;
-use App\Models\Institution;
+use App\Models\Mentorship\StudentProject;
+use App\Models\Core\User;
+use App\Models\Core\Institution;
 
 class StudentProjectSeeder extends Seeder
 {

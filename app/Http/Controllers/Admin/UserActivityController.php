@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\StudentActivityLog;
+use App\Models\Core\StudentActivityLog;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 

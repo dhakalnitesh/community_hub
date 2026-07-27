@@ -36,7 +36,7 @@ class AnonymousNameGenerator
                 $name .= '-' . substr(uniqid(), -4);
                 break;
             }
-        } while (\App\Models\User::where('anonymous_name', $name)->exists());
+        } while (\App\Models\Core\User::where('anonymous_name', $name)->exists());
 
         return $name;
     }

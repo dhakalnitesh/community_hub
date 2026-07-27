@@ -3,9 +3,9 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\MentorSession;
-use App\Models\User;
-use App\Models\Discussion;
+use App\Models\Mentorship\MentorSession;
+use App\Models\Core\User;
+use App\Models\Community\Discussion;
 
 class MentorSessionSeeder extends Seeder
 {
@@ -19,7 +19,7 @@ class MentorSessionSeeder extends Seeder
             'title' => 'Struggling with Laravel Eloquent Relationships',
             'body' => 'I keep getting N+1 query issues. Can someone explain this in simple terms?',
             'is_anonymous' => true,
-            'discussionable_type' => 'App\Models\Subject',
+            'discussionable_type' => 'App\Models\Academic\Subject',
             'discussionable_id' => 1,
         ]);
 

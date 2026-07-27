@@ -2,9 +2,9 @@
 
 namespace App\Services;
 
-use App\Models\Grievance;
-use App\Models\GrievanceEvent;
-use App\Models\SpamLog;
+use App\Models\Grievance\Grievance;
+use App\Models\Grievance\GrievanceEvent;
+use App\Models\Platform\SpamLog;
 use App\Events\GrievanceSubmitted;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;

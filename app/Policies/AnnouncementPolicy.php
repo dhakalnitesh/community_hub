@@ -2,8 +2,8 @@
 
 namespace App\Policies;
 
-use App\Models\Announcement;
-use App\Models\User;
+use App\Models\Platform\Announcement;
+use App\Models\Core\User;
 
 class AnnouncementPolicy
 {

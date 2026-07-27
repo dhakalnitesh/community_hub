@@ -2,10 +2,10 @@
 
 namespace App\Policies;
 
-use App\Models\Assignment;
-use App\Models\Discussion;
-use App\Models\Subject;
-use App\Models\User;
+use App\Models\Academic\Assignment;
+use App\Models\Community\Discussion;
+use App\Models\Academic\Subject;
+use App\Models\Core\User;
 
 class DiscussionPolicy
 {

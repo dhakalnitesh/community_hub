@@ -2,8 +2,8 @@
 
 namespace App\Events;
 
-use App\Models\ProjectReview;
-use App\Models\StudentProject;
+use App\Models\Mentorship\ProjectReview;
+use App\Models\Mentorship\StudentProject;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;

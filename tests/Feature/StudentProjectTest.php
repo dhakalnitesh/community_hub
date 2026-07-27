@@ -2,8 +2,8 @@
 
 namespace Tests\Feature;
 
-use App\Models\StudentProject;
-use App\Models\User;
+use App\Models\Mentorship\StudentProject;
+use App\Models\Core\User;
 use Database\Seeders\RolesAndPermissionsSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -21,7 +21,7 @@ class StudentProjectTest extends TestCase
     public function test_student_can_submit_project()
     {
         $student = User::factory()->student()->create();
-        $institution = \App\Models\Institution::factory()->create();
+        $institution = \App\Models\Core\Institution::factory()->create();
         $student->institutions()->attach($institution->id, ['role' => 'student']);
 
         $response = $this->actingAs($student)->post(route('projects.store'), [
@@ -41,7 +41,7 @@ class StudentProjectTest extends TestCase
     public function test_showcase_lists_projects()
     {
         $student = User::factory()->student()->create();
-        $institution = \App\Models\Institution::factory()->create();
+        $institution = \App\Models\Core\Institution::factory()->create();
         $student->institutions()->attach($institution->id, ['role' => 'student']);
 
         StudentProject::create([

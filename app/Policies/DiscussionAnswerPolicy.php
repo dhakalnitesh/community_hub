@@ -2,8 +2,8 @@
 
 namespace App\Policies;
 
-use App\Models\DiscussionAnswer;
-use App\Models\User;
+use App\Models\Community\DiscussionAnswer;
+use App\Models\Core\User;
 
 class DiscussionAnswerPolicy
 {
@@ -26,10 +26,10 @@ class DiscussionAnswerPolicy
         if ($user->isInstitutionAdmin()) {
             $discussion = $answer->discussion;
             $discussionable = $discussion->discussionable;
-            if ($discussionable instanceof \App\Models\Subject) {
+            if ($discussionable instanceof \App\Models\Academic\Subject) {
                 return $user->institutions()->where('institutions.id', $discussionable->semester->institution_id)->exists();
             }
-            if ($discussionable instanceof \App\Models\Assignment) {
+            if ($discussionable instanceof \App\Models\Academic\Assignment) {
                 return $user->institutions()->where('institutions.id', $discussionable->subject->semester->institution_id)->exists();
             }
         }
@@ -37,10 +37,10 @@ class DiscussionAnswerPolicy
         if ($user->isTeacher()) {
             $discussion = $answer->discussion;
             $discussionable = $discussion->discussionable;
-            if ($discussionable instanceof \App\Models\Subject) {
+            if ($discussionable instanceof \App\Models\Academic\Subject) {
                 return $user->taughtSubjects()->where('subject_id', $discussionable->id)->exists();
             }
-            if ($discussionable instanceof \App\Models\Assignment) {
+            if ($discussionable instanceof \App\Models\Academic\Assignment) {
                 return $user->taughtSubjects()->where('subject_id', $discussionable->subject_id)->exists();
             }
         }
@@ -57,10 +57,10 @@ class DiscussionAnswerPolicy
         if ($user->isInstitutionAdmin()) {
             $discussion = $answer->discussion;
             $discussionable = $discussion->discussionable;
-            if ($discussionable instanceof \App\Models\Subject) {
+            if ($discussionable instanceof \App\Models\Academic\Subject) {
                 return $user->institutions()->where('institutions.id', $discussionable->semester->institution_id)->exists();
             }
-            if ($discussionable instanceof \App\Models\Assignment) {
+            if ($discussionable instanceof \App\Models\Academic\Assignment) {
                 return $user->institutions()->where('institutions.id', $discussionable->subject->semester->institution_id)->exists();
             }
         }
@@ -68,10 +68,10 @@ class DiscussionAnswerPolicy
         if ($user->isTeacher()) {
             $discussion = $answer->discussion;
             $discussionable = $discussion->discussionable;
-            if ($discussionable instanceof \App\Models\Subject) {
+            if ($discussionable instanceof \App\Models\Academic\Subject) {
                 return $user->taughtSubjects()->where('subject_id', $discussionable->id)->exists();
             }
-            if ($discussionable instanceof \App\Models\Assignment) {
+            if ($discussionable instanceof \App\Models\Academic\Assignment) {
                 return $user->taughtSubjects()->where('subject_id', $discussionable->subject_id)->exists();
             }
         }

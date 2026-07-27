@@ -2,7 +2,7 @@
 
 namespace App\Events;
 
-use App\Models\Announcement;
+use App\Models\Platform\Announcement;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 

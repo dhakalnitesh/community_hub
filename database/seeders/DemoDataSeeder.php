@@ -2,18 +2,18 @@
 
 namespace Database\Seeders;
 
-use App\Models\Announcement;
-use App\Models\Assignment;
-use App\Models\Discussion;
-use App\Models\DiscussionAnswer;
-use App\Models\Institution;
-use App\Models\Resource;
-use App\Models\Section;
-use App\Models\Semester;
-use App\Models\Subject;
-use App\Models\Submission;
-use App\Models\User;
-use App\Models\Vote;
+use App\Models\Platform\Announcement;
+use App\Models\Academic\Assignment;
+use App\Models\Community\Discussion;
+use App\Models\Community\DiscussionAnswer;
+use App\Models\Core\Institution;
+use App\Models\Academic\Resource;
+use App\Models\Academic\Section;
+use App\Models\Academic\Semester;
+use App\Models\Academic\Subject;
+use App\Models\Academic\Submission;
+use App\Models\Core\User;
+use App\Models\Community\Vote;
 use App\Services\AnonymousNameGenerator;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;

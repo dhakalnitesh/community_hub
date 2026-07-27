@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Grievance;
-use App\Models\GrievanceComment;
-use App\Models\SpamLog;
+use App\Models\Grievance\Grievance;
+use App\Models\Grievance\GrievanceComment;
+use App\Models\Platform\SpamLog;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 

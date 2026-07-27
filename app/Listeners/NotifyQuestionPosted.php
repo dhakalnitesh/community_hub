@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use App\Enums\NotificationType;
 use App\Events\QuestionPosted;
 use App\Services\NotificationService;
-use App\Models\Subject;
+use App\Models\Academic\Subject;
 
 class NotifyQuestionPosted implements ShouldQueue
 {

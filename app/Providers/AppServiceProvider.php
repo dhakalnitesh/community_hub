@@ -2,12 +2,12 @@
 
 namespace App\Providers;
 
-use App\Models\Assignment;
-use App\Models\Discussion;
-use App\Models\DiscussionAnswer;
-use App\Models\Section;
-use App\Models\Semester;
-use App\Models\Subject;
+use App\Models\Academic\Assignment;
+use App\Models\Community\Discussion;
+use App\Models\Community\DiscussionAnswer;
+use App\Models\Academic\Section;
+use App\Models\Academic\Semester;
+use App\Models\Academic\Subject;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
@@ -61,7 +61,7 @@ class AppServiceProvider extends ServiceProvider
             'section' => Section::class,
             'discussion' => Discussion::class,
             'discussion_answer' => DiscussionAnswer::class,
-            'grievance' => \App\Models\Grievance::class,
+            'grievance' => \App\Models\Grievance\Grievance::class,
         ]);
 
         RateLimiter::for('grievances:submit', fn(Request $request) => Limit::perMinute(3)->by($request->ip()));

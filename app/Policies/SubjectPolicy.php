@@ -2,8 +2,8 @@
 
 namespace App\Policies;
 
-use App\Models\Subject;
-use App\Models\User;
+use App\Models\Academic\Subject;
+use App\Models\Core\User;
 
 class SubjectPolicy
 {

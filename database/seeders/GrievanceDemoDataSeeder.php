@@ -2,11 +2,11 @@
 
 namespace Database\Seeders;
 
-use App\Models\Grievance;
-use App\Models\GrievanceCategory;
-use App\Models\GrievanceComment;
-use App\Models\GrievanceEvent;
-use App\Models\GrievanceUpvote;
+use App\Models\Grievance\Grievance;
+use App\Models\Grievance\GrievanceCategory;
+use App\Models\Grievance\GrievanceComment;
+use App\Models\Grievance\GrievanceEvent;
+use App\Models\Grievance\GrievanceUpvote;
 use App\Services\IpAnonymizer;
 use Illuminate\Database\Seeder;
 

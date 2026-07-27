@@ -2,10 +2,10 @@
 
 namespace Tests\Feature;
 
-use App\Models\Grievance;
-use App\Models\GrievanceCategory;
-use App\Models\User;
-use App\Models\Institution;
+use App\Models\Grievance\Grievance;
+use App\Models\Grievance\GrievanceCategory;
+use App\Models\Core\User;
+use App\Models\Core\Institution;
 use Database\Seeders\RolesAndPermissionsSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;

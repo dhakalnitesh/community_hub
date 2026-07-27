@@ -2,7 +2,10 @@
 
 namespace App\Models\Traits;
 
-use App\Models\User;
+use App\Models\Academic\Subject;
+
+
+use App\Models\Core\User;
 
 trait TeachableScope
 {
@@ -28,7 +31,7 @@ trait TeachableScope
 
         if ($user->isStudent()) {
             $semesterIds = $user->enrolledSemesters()->pluck('semesters.id');
-            $subjectIds = \App\Models\Subject::whereIn('semester_id', $semesterIds)->pluck('id');
+            $subjectIds = \App\Models\Academic\Subject::whereIn('semester_id', $semesterIds)->pluck('id');
 
             return $query->whereIn('subject_id', $subjectIds);
         }

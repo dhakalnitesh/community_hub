@@ -1,18 +1,20 @@
 <?php
 
 use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\AssignmentController;
-use App\Http\Controllers\DiscussionAnswerController;
-use App\Http\Controllers\EnrollmentController;
+use App\Http\Controllers\Academic\AssignmentController;
+use App\Http\Controllers\Community\DiscussionAnswerController;
+use App\Http\Controllers\Academic\EnrollmentController;
 use App\Http\Controllers\InstitutionAdminController;
-use App\Http\Controllers\SemesterController;
-use App\Http\Controllers\SubjectController;
-use App\Http\Controllers\SubmissionController;
-use App\Http\Controllers\DiscussionController;
-use App\Http\Controllers\MentorSessionController;
+use App\Http\Controllers\Academic\SemesterController;
+use App\Http\Controllers\Academic\SubjectController;
+use App\Http\Controllers\Academic\SubmissionController;
+use App\Http\Controllers\Community\DiscussionController;
+use App\Http\Controllers\Mentorship\MentorSessionController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\StudentProjectController;
-use App\Http\Controllers\VoteController;
+use App\Http\Controllers\Student\DashboardController as StudentDashboardController;
+use App\Http\Controllers\Student\ProjectController as StudentProjectController;
+use App\Http\Controllers\Teacher\ClassController as TeacherClassController;
+use App\Http\Controllers\Community\VoteController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -25,10 +27,10 @@ Route::get('/', function () {
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
         'stats' => [
-            'questions' => \App\Models\Discussion::count(),
-            'answers' => \App\Models\DiscussionAnswer::count(),
-            'projects' => \App\Models\StudentProject::count(),
-            'subjects' => \App\Models\Subject::count(),
+            'questions' => \App\Models\Community\Discussion::count(),
+            'answers' => \App\Models\Community\DiscussionAnswer::count(),
+            'projects' => \App\Models\Mentorship\StudentProject::count(),
+            'subjects' => \App\Models\Academic\Subject::count(),
         ],
     ]);
 });
@@ -43,10 +45,10 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     // Notifications
-    Route::get('/notifications', [\App\Http\Controllers\NotificationController::class, 'index'])->name('notifications.index');
-    Route::get('/notifications/api', [\App\Http\Controllers\NotificationController::class, 'apiIndex'])->name('notifications.api');
-    Route::post('/notifications/read-all', [\App\Http\Controllers\NotificationController::class, 'markAllAsRead'])->name('notifications.read_all');
-    Route::post('/notifications/{notification}/read', [\App\Http\Controllers\NotificationController::class, 'markAsRead'])->name('notifications.mark_read');
+    Route::get('/notifications', [App\Http\Controllers\Platform\NotificationController::class, 'index'])->name('notifications.index');
+    Route::get('/notifications/api', [App\Http\Controllers\Platform\NotificationController::class, 'apiIndex'])->name('notifications.api');
+    Route::post('/notifications/read-all', [App\Http\Controllers\Platform\NotificationController::class, 'markAllAsRead'])->name('notifications.read_all');
+    Route::post('/notifications/{notification}/read', [App\Http\Controllers\Platform\NotificationController::class, 'markAsRead'])->name('notifications.mark_read');
 });
 
 Route::middleware(['auth', 'role:super_admin'])->group(function () {
@@ -64,45 +66,9 @@ Route::middleware(['auth', 'role:super_admin'])->group(function () {
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/student/dashboard', function () {
-        $user = Auth::user();
-        if (!$user->isStudent()) {
-            return redirect()->route('dashboard');
-        }
-
-        $semesterIds = $user->enrolledSemesters()->pluck('semesters.id');
-        $subjectIds = \App\Models\Subject::whereIn('semester_id', $semesterIds)->pluck('id');
-        $stats = [];
-        $stats['subjects'] = count($subjectIds);
-        $stats['questions'] = \App\Models\Discussion::where('discussionable_type', 'subject')
-            ->whereIn('discussionable_id', $subjectIds)->where('user_id', $user->id)->count();
-        $stats['answers'] = \App\Models\DiscussionAnswer::where('user_id', $user->id)->count();
-        $stats['grievances'] = \App\Models\Grievance::where('user_id', $user->id)->visible()->count();
-        $stats['open_grievances'] = \App\Models\Grievance::where('user_id', $user->id)->visible()->where('status', '!=', 'resolved')->count();
-        $stats['resolved_grievances'] = \App\Models\Grievance::where('user_id', $user->id)->visible()->where('status', 'resolved')->count();
-        $stats['critical_grievances'] = \App\Models\Grievance::where('user_id', $user->id)->visible()->where('priority', 'critical')->count();
-
-        return Inertia::render('Student/Dashboard', ['stats' => $stats]);
-    })->name('student.dashboard');
-
-    Route::get('/student/mysubject', function () {
-        $user = Auth::user();
-        if (!$user->isStudent()) {
-            return redirect()->route('dashboard');
-        }
-        $semesterIds = $user->enrolledSemesters()->pluck('semesters.id');
-        $subjects = \App\Models\Subject::whereIn('semester_id', $semesterIds)->with('semester.institution', 'teachers')->get();
-        return Inertia::render('Student/MySubject', ['subjects' => $subjects]);
-    })->name('student.subjects');
-
-    Route::get('/classes', function () {
-        $user = Auth::user();
-        if (!$user->isTeacher()) {
-            return redirect()->route('dashboard');
-        }
-        $subjects = $user->taughtSubjects()->with('semester.institution')->get();
-        return Inertia::render('Teacher/MyClasses', ['subjects' => $subjects]);
-    })->name('classes.index');
+    Route::get('/student/dashboard', [StudentDashboardController::class, 'index'])->name('student.dashboard');
+    Route::get('/student/mysubject', [StudentDashboardController::class, 'mySubjects'])->name('student.subjects');
+    Route::get('/classes', [TeacherClassController::class, 'index'])->name('classes.index');
 });
 
 Route::middleware('auth')->prefix('questions')->name('questions.')->group(function () {
@@ -126,8 +92,8 @@ Route::middleware('auth')->prefix('questions')->name('questions.')->group(functi
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/talent-showcase', [StudentProjectController::class, 'index'])->name('projects.index');
-    Route::post('/talent-showcase', [\App\Http\Controllers\StudentProjectController::class, 'store'])->name('projects.store');
-    Route::post('/projects/{project}/reviews', [\App\Http\Controllers\ProjectReviewController::class, 'store'])->name('projects.reviews.store');
+    Route::post('/talent-showcase', [StudentProjectController::class, 'store'])->name('projects.store');
+    Route::post('/projects/{project}/reviews', [App\Http\Controllers\Mentorship\ProjectReviewController::class, 'store'])->name('projects.reviews.store');
     
     Route::get('/mentor-board', [MentorSessionController::class, 'index'])->name('mentorship.index');
     Route::post('/mentor-sessions/{mentorSession}/accept', [MentorSessionController::class, 'accept'])->name('mentorship.accept');
@@ -165,30 +131,30 @@ Route::middleware(['auth', 'role:super_admin|institution_admin'])->prefix('admin
 
 Route::middleware('auth')->post('/enroll', [EnrollmentController::class, 'enroll'])->name('enroll');
 
-Route::resource('resources', \App\Http\Controllers\ResourceController::class)->middleware(['auth', 'verified']);
-Route::resource('announcements', \App\Http\Controllers\AnnouncementController::class)->middleware(['auth', 'verified']);
+Route::resource('resources', App\Http\Controllers\Academic\ResourceController::class)->middleware(['auth', 'verified']);
+Route::resource('announcements', App\Http\Controllers\Platform\AnnouncementController::class)->middleware(['auth', 'verified']);
 
 require __DIR__ . '/auth.php';
 
 // Grievance System Routes
-Route::get('/grievances/submit', [\App\Http\Controllers\GrievanceController::class, 'create'])->name('grievances.create');
-Route::post('/grievances', [\App\Http\Controllers\GrievanceController::class, 'store'])->name('grievances.store')->middleware('throttle:grievances:submit');
-Route::get('/grievances/feed', [\App\Http\Controllers\GrievanceFeedController::class, 'index'])->name('grievances.feed');
-Route::get('/grievances/track', [\App\Http\Controllers\GrievanceController::class, 'trackStatus'])->name('grievances.track')->middleware('throttle:grievances:status');
-Route::get('/grievances/r/{reference_code}', [\App\Http\Controllers\GrievanceController::class, 'showReference'])->name('grievances.show-reference');
+Route::get('/grievances/submit', [App\Http\Controllers\Grievance\GrievanceController::class, 'create'])->name('grievances.create');
+Route::post('/grievances', [App\Http\Controllers\Grievance\GrievanceController::class, 'store'])->name('grievances.store')->middleware('throttle:grievances:submit');
+Route::get('/grievances/feed', [App\Http\Controllers\Grievance\GrievanceFeedController::class, 'index'])->name('grievances.feed');
+Route::get('/grievances/track', [App\Http\Controllers\Grievance\GrievanceController::class, 'trackStatus'])->name('grievances.track')->middleware('throttle:grievances:status');
+Route::get('/grievances/r/{reference_code}', [App\Http\Controllers\Grievance\GrievanceController::class, 'showReference'])->name('grievances.show-reference');
 
-Route::post('/grievances/{grievance}/upvote', [\App\Http\Controllers\UpvoteController::class, 'toggle'])->name('grievances.upvote');
-Route::get('/grievances/{grievance}/upvoters', [\App\Http\Controllers\UpvoteController::class, 'upvoters'])->name('grievances.upvoters');
-Route::get('/grievances/{grievance}/comments', [\App\Http\Controllers\CommentController::class, 'index'])->name('grievances.comments.index')->middleware('throttle:grievances:feed');
-Route::post('/grievances/{grievance}/comments', [\App\Http\Controllers\CommentController::class, 'store'])->name('grievances.comments.store')->middleware('throttle:grievances:comments');
-Route::delete('/comments/{comment}', [\App\Http\Controllers\CommentController::class, 'destroy'])->name('grievances.comments.destroy');
+Route::post('/grievances/{grievance}/upvote', [App\Http\Controllers\Community\UpvoteController::class, 'toggle'])->name('grievances.upvote');
+Route::get('/grievances/{grievance}/upvoters', [App\Http\Controllers\Community\UpvoteController::class, 'upvoters'])->name('grievances.upvoters');
+Route::get('/grievances/{grievance}/comments', [App\Http\Controllers\Community\CommentController::class, 'index'])->name('grievances.comments.index')->middleware('throttle:grievances:feed');
+Route::post('/grievances/{grievance}/comments', [App\Http\Controllers\Community\CommentController::class, 'store'])->name('grievances.comments.store')->middleware('throttle:grievances:comments');
+Route::delete('/comments/{comment}', [App\Http\Controllers\Community\CommentController::class, 'destroy'])->name('grievances.comments.destroy');
 
-Route::post('/grievances/{grievance}/flag', [\App\Http\Controllers\FlagController::class, 'flagGrievance'])->name('grievances.flag');
-Route::post('/comments/{comment}/flag', [\App\Http\Controllers\FlagController::class, 'flagComment'])->name('comments.flag');
+Route::post('/grievances/{grievance}/flag', [App\Http\Controllers\Grievance\FlagController::class, 'flagGrievance'])->name('grievances.flag');
+Route::post('/comments/{comment}/flag', [App\Http\Controllers\Grievance\FlagController::class, 'flagComment'])->name('comments.flag');
 
-Route::get('/api/grievances/stats/overview', [\App\Http\Controllers\StatsController::class, 'overview']);
-Route::get('/api/grievances/stats/categories', [\App\Http\Controllers\StatsController::class, 'categoryBreakdown']);
-Route::get('/api/grievances/stats/trends', [\App\Http\Controllers\StatsController::class, 'issuesOverTime']);
+Route::get('/api/grievances/stats/overview', [App\Http\Controllers\Platform\StatsController::class, 'overview']);
+Route::get('/api/grievances/stats/categories', [App\Http\Controllers\Platform\StatsController::class, 'categoryBreakdown']);
+Route::get('/api/grievances/stats/trends', [App\Http\Controllers\Platform\StatsController::class, 'issuesOverTime']);
 
 Route::middleware(['auth', 'role:super_admin|institution_admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/grievances', [\App\Http\Controllers\Admin\GrievanceController::class, 'index'])->name('grievances.index');

@@ -2,8 +2,8 @@
 
 namespace App\Policies;
 
-use App\Models\Assignment;
-use App\Models\User;
+use App\Models\Academic\Assignment;
+use App\Models\Core\User;
 
 class AssignmentPolicy
 {

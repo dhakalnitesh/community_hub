@@ -2,8 +2,8 @@
 
 namespace App\Events;
 
-use App\Models\Subject;
-use App\Models\User;
+use App\Models\Academic\Subject;
+use App\Models\Core\User;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 

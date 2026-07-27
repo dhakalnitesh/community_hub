@@ -40,7 +40,7 @@ class RegistrationTest extends TestCase
             'role' => 'student',
         ]);
 
-        $user = \App\Models\User::where('email', 'test@example.com')->first();
+        $user = \App\Models\Core\User::where('email', 'test@example.com')->first();
         $this->assertNotNull($user->anonymous_name);
         $this->assertStringMatchesFormat('%s%s%d', $user->anonymous_name);
         $this->assertTrue($user->hasRole('student'));

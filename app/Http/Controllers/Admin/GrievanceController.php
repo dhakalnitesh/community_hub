@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Grievance;
-use App\Models\GrievanceEvent;
+use App\Models\Grievance\Grievance;
+use App\Models\Grievance\GrievanceEvent;
 use App\Services\BsDateService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -80,7 +80,7 @@ class GrievanceController extends Controller
             'media',
         ]);
 
-        $staff = \App\Models\User::role('teacher')->whereHas('institutions', fn($q) => $q->where('id', $grievance->institution_id))->get();
+        $staff = \App\Models\Core\User::role('teacher')->whereHas('institutions', fn($q) => $q->where('id', $grievance->institution_id))->get();
 
         return Inertia::render('Admin/Grievances/Show', [
             'grievance' => [
@@ -202,7 +202,7 @@ class GrievanceController extends Controller
 
         $grievance->update(['assigned_to' => $validated['assigned_to']]);
 
-        $assignedUser = \App\Models\User::find($validated['assigned_to']);
+        $assignedUser = \App\Models\Core\User::find($validated['assigned_to']);
 
         GrievanceEvent::create([
             'grievance_id' => $grievance->id,

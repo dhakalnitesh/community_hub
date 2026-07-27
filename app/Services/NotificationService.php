@@ -3,8 +3,8 @@
 namespace App\Services;
 
 use App\Enums\NotificationType;
-use App\Models\Notification;
-use App\Models\User;
+use App\Models\Platform\Notification;
+use App\Models\Core\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 

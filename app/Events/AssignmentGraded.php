@@ -2,7 +2,7 @@
 
 namespace App\Events;
 
-use App\Models\Submission;
+use App\Models\Academic\Submission;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 

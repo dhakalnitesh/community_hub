@@ -2,8 +2,8 @@
 
 namespace App\Policies;
 
-use App\Models\StudentProject;
-use App\Models\User;
+use App\Models\Mentorship\StudentProject;
+use App\Models\Core\User;
 
 class StudentProjectPolicy
 {

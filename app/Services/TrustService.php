@@ -2,9 +2,9 @@
 
 namespace App\Services;
 
-use App\Models\Grievance;
-use App\Models\SpamLog;
-use App\Models\User;
+use App\Models\Grievance\Grievance;
+use App\Models\Platform\SpamLog;
+use App\Models\Core\User;
 use Illuminate\Support\Facades\Cache;
 
 class TrustService

@@ -2,8 +2,8 @@
 
 namespace App\Policies;
 
-use App\Models\Submission;
-use App\Models\User;
+use App\Models\Academic\Submission;
+use App\Models\Core\User;
 
 class SubmissionPolicy
 {

@@ -30,7 +30,7 @@ class SuperAdminPageController extends Controller
     {
         abort_if(!$request->user()->isSuperAdmin(), 403);
         
-        $query = \App\Models\User::query();
+        $query = \App\Models\Core\User::query();
         
         if ($request->has('search') && $request->search) {
             $query->where(function($q) use ($request) {
@@ -50,7 +50,7 @@ class SuperAdminPageController extends Controller
         ]);
     }
 
-    public function updateRole(Request $request, \App\Models\User $user)
+    public function updateRole(Request $request, \App\Models\Core\User $user)
     {
         abort_if(!$request->user()->isSuperAdmin(), 403);
         

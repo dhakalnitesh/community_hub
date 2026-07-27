@@ -2,8 +2,8 @@
 
 namespace App\Policies;
 
-use App\Models\Resource;
-use App\Models\User;
+use App\Models\Academic\Resource;
+use App\Models\Core\User;
 
 class ResourcePolicy
 {

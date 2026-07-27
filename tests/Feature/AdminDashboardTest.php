@@ -2,10 +2,10 @@
 
 namespace Tests\Feature;
 
-use App\Models\Institution;
-use App\Models\Semester;
-use App\Models\Subject;
-use App\Models\User;
+use App\Models\Core\Institution;
+use App\Models\Academic\Semester;
+use App\Models\Academic\Subject;
+use App\Models\Core\User;
 use Database\Seeders\RolesAndPermissionsSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;

@@ -2,7 +2,7 @@
 
 namespace App\Events;
 
-use App\Models\Grievance;
+use App\Models\Grievance\Grievance;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 

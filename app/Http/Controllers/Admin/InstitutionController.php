@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Institution;
-use App\Models\User;
+use App\Models\Core\Institution;
+use App\Models\Core\User;
 use App\Services\AnonymousNameGenerator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;

@@ -5,11 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
-use App\Models\Discussion;
-use App\Models\DiscussionAnswer;
-use App\Models\Grievance;
-use App\Models\Semester;
-use App\Models\Subject;
+use App\Models\Community\Discussion;
+use App\Models\Community\DiscussionAnswer;
+use App\Models\Grievance\Grievance;
+use App\Models\Academic\Semester;
+use App\Models\Academic\Subject;
 
 class DashboardController extends Controller
 {
@@ -31,11 +31,11 @@ class DashboardController extends Controller
             $stats['resolved_grievances'] = Grievance::whereIn('subject_id', $subjectIds)->visible()->where('status', 'resolved')->count();
             $stats['critical_grievances'] = Grievance::whereIn('subject_id', $subjectIds)->visible()->where('priority', 'critical')->count();
             
-            $stats['to_grade'] = \App\Models\Submission::whereHas('assignment', function ($q) use ($subjectIds) {
+            $stats['to_grade'] = \App\Models\Academic\Submission::whereHas('assignment', function ($q) use ($subjectIds) {
                 $q->whereIn('subject_id', $subjectIds);
             })->where('status', 'submitted')->count();
 
-            $recentSubmissions = \App\Models\Submission::whereHas('assignment', function ($q) use ($subjectIds) {
+            $recentSubmissions = \App\Models\Academic\Submission::whereHas('assignment', function ($q) use ($subjectIds) {
                 $q->whereIn('subject_id', $subjectIds);
             })->with(['student', 'assignment'])->latest('submitted_at')->take(5)->get();
 

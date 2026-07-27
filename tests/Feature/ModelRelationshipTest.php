@@ -2,14 +2,14 @@
 
 namespace Tests\Feature;
 
-use App\Models\Discussion;
-use App\Models\DiscussionAnswer;
-use App\Models\Institution;
-use App\Models\Section;
-use App\Models\Semester;
-use App\Models\Subject;
-use App\Models\User;
-use App\Models\Vote;
+use App\Models\Community\Discussion;
+use App\Models\Community\DiscussionAnswer;
+use App\Models\Core\Institution;
+use App\Models\Academic\Section;
+use App\Models\Academic\Semester;
+use App\Models\Academic\Subject;
+use App\Models\Core\User;
+use App\Models\Community\Vote;
 use Database\Seeders\RolesAndPermissionsSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -109,7 +109,7 @@ class ModelRelationshipTest extends TestCase
 
     public function test_discussion_morphs_to_assignment(): void
     {
-        $assignment = \App\Models\Assignment::factory()->create([
+        $assignment = \App\Models\Academic\Assignment::factory()->create([
             'subject_id' => $this->subject->id,
             'teacher_id' => $this->teacher->id,
         ]);
@@ -124,7 +124,7 @@ class ModelRelationshipTest extends TestCase
         ]);
 
         $this->assertEquals('assignment', $discussion->discussionable_type);
-        $this->assertInstanceOf(\App\Models\Assignment::class, $discussion->discussionable);
+        $this->assertInstanceOf(\App\Models\Academic\Assignment::class, $discussion->discussionable);
     }
 
     public function test_discussion_has_answers(): void

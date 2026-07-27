@@ -2,13 +2,13 @@
 
 namespace Tests\Feature;
 
-use App\Models\Discussion;
-use App\Models\DiscussionAnswer;
-use App\Models\Institution;
-use App\Models\Semester;
-use App\Models\StudentProject;
-use App\Models\Subject;
-use App\Models\User;
+use App\Models\Community\Discussion;
+use App\Models\Community\DiscussionAnswer;
+use App\Models\Core\Institution;
+use App\Models\Academic\Semester;
+use App\Models\Mentorship\StudentProject;
+use App\Models\Academic\Subject;
+use App\Models\Core\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;

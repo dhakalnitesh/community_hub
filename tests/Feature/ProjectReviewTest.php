@@ -2,9 +2,9 @@
 
 namespace Tests\Feature;
 
-use App\Models\StudentProject;
-use App\Models\User;
-use App\Models\Institution;
+use App\Models\Mentorship\StudentProject;
+use App\Models\Core\User;
+use App\Models\Core\Institution;
 use Database\Seeders\RolesAndPermissionsSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;

@@ -2,7 +2,7 @@
 
 namespace App\Events;
 
-use App\Models\Discussion;
+use App\Models\Community\Discussion;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 

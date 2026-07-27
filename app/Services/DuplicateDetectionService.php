@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Models\Grievance;
+use App\Models\Grievance\Grievance;
 
 class DuplicateDetectionService
 {
