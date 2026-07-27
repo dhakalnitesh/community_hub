@@ -124,6 +124,28 @@ export default function SuperAdminSidebar({ activeItem = '' }) {
                             <span className="material-symbols-outlined">campaign</span>
                             <span className="font-label-md text-label-md">Announcements</span>
                         </Link>
+                        <Link
+                            href={safeRoute('projects.index', '/talent-showcase')}
+                            className={`flex items-center gap-4 px-4 py-2 rounded-lg font-medium transition-all ${
+                                isActive('/talent-showcase') || activeItem === 'Talent Showcase'
+                                    ? 'text-primary font-bold bg-primary-container/10 border-l-4 border-primary'
+                                    : 'text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface'
+                            }`}
+                        >
+                            <span className="material-symbols-outlined">emoji_events</span>
+                            <span className="font-label-md text-label-md">Talent Showcase</span>
+                        </Link>
+                        <Link
+                            href={safeRoute('mentorship.index', '/mentor-board')}
+                            className={`flex items-center gap-4 px-4 py-2 rounded-lg font-medium transition-all ${
+                                isActive('/mentor-board') || activeItem === 'Mentorship'
+                                    ? 'text-primary font-bold bg-primary-container/10 border-l-4 border-primary'
+                                    : 'text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface'
+                            }`}
+                        >
+                            <span className="material-symbols-outlined">handshake</span>
+                            <span className="font-label-md text-label-md">Mentorship</span>
+                        </Link>
                     </div>
                 </div>
 

@@ -31,6 +31,13 @@ export default function TeacherSidebar() {
                 { name: 'Anonymous Q&A', path: '/questions', icon: 'forum', badge: 'New' },
                 { name: 'Grievances', path: '/grievances/feed', icon: 'report_problem' },
             ]
+        },
+        {
+            title: 'Community',
+            links: [
+                { name: 'Talent Showcase', path: '/talent-showcase', route: 'projects.index', icon: 'emoji_events' },
+                { name: 'Mentorship', path: '/mentor-board', route: 'mentorship.index', icon: 'handshake' },
+            ]
         }
     ];
 
@@ -62,7 +69,7 @@ export default function TeacherSidebar() {
                                 return (
                                     <li key={link.name}>
                                         <Link
-                                            href={link.path !== '/classes' ? route(link.path.replace('/feed', '').replace('/', '') + (link.path === '/dashboard' ? '' : link.path === '/grievances/feed' ? '.feed' : '.index')) : route('classes.index')}
+                                            href={link.route ? route(link.route) : (link.path !== '/classes' ? route(link.path.replace('/feed', '').replace('/', '') + (link.path === '/dashboard' ? '' : link.path === '/grievances/feed' ? '.feed' : '.index')) : route('classes.index'))}
                                             className={`group flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
                                                 active 
                                                 ? 'bg-indigo-50 text-indigo-700' 

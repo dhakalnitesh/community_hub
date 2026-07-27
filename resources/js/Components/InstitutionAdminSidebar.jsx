@@ -132,6 +132,28 @@ export default function InstitutionAdminSidebar({ activeItem = '' }) {
                     Discussions
                 </Link>
                 <Link
+                    href={safeRoute('projects.index', '/talent-showcase')}
+                    className={`flex items-center gap-4 px-4 py-2 transition-colors duration-200 ease-in-out font-body-sm text-body-sm ${
+                        isActive('/talent-showcase') || activeItem === 'Talent Showcase'
+                            ? 'text-primary font-bold border-r-4 border-primary'
+                            : 'text-on-surface-variant hover:bg-surface-container-low'
+                    }`}
+                >
+                    <span className="material-symbols-outlined">emoji_events</span>
+                    Talent Showcase
+                </Link>
+                <Link
+                    href={safeRoute('mentorship.index', '/mentor-board')}
+                    className={`flex items-center gap-4 px-4 py-2 transition-colors duration-200 ease-in-out font-body-sm text-body-sm ${
+                        isActive('/mentor-board') || activeItem === 'Mentorship'
+                            ? 'text-primary font-bold border-r-4 border-primary'
+                            : 'text-on-surface-variant hover:bg-surface-container-low'
+                    }`}
+                >
+                    <span className="material-symbols-outlined">handshake</span>
+                    Mentorship
+                </Link>
+                <Link
                     href="#"
                     className="flex items-center gap-4 px-4 py-2 text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200 ease-in-out font-body-sm text-body-sm"
                 >

@@ -9,6 +9,8 @@ export default function StudentSidebar({ activeItem = '' }) {
         { name: 'Dashboard', icon: 'dashboard', route: 'student.dashboard', fallback: '/student/dashboard', pattern: '/student/dashboard' },
         { name: 'My Subjects', icon: 'auto_stories', route: 'student.subjects', fallback: '/student/mysubject', pattern: '/student/mysubject' },
         { name: 'Discussions', icon: 'forum', route: 'questions.index', fallback: '/questions', pattern: '/questions' },
+        { name: 'Talent Showcase', icon: 'emoji_events', route: 'projects.index', fallback: '/talent-showcase', pattern: '/talent-showcase' },
+        { name: 'Mentorship', icon: 'handshake', route: 'mentorship.index', fallback: '/mentor-board', pattern: '/mentor-board' },
         { name: 'Assignments', icon: 'assignment', route: 'assignments.index', fallback: '/assignments', pattern: '/assignments' },
         { name: 'Resources', icon: 'folder_open', route: 'resources.index', fallback: '/resources', pattern: '/resources' },
         { name: 'Grievances', icon: 'report', route: 'grievances.create', fallback: '/grievances/submit', pattern: '/grievances' },

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, useForm, Link } from '@inertiajs/react';
 import { Briefcase, Code, ExternalLink, Plus, Loader2 } from 'lucide-react';
+import ReviewSection from './Partials/ReviewSection';
 
 export default function Showcase({ auth, projects }) {
     const [showForm, setShowForm] = useState(false);
@@ -121,6 +122,7 @@ export default function Showcase({ auth, projects }) {
                                         )}
                                     </div>
                                 </div>
+                                <ReviewSection project={project} auth={auth} />
                             </div>
                         </div>
                     ))}

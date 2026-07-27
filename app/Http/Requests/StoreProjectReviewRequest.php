@@ -8,8 +8,7 @@ class StoreProjectReviewRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        // Must be a teacher or admin to review projects
-        return $this->user() && ($this->user()->isTeacher() || $this->user()->isAdmin());
+        return $this->user() && $this->user()->hasAnyRole(['teacher', 'institution_admin', 'super_admin']);
     }
 
     public function rules(): array
