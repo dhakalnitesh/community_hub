@@ -9,6 +9,12 @@ use App\Events\GrievanceSubmitted;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
+use App\Services\TurnstileService;
+use App\Services\TrustService;
+use App\Services\MergeService;
+use App\Services\AbuseDetectionService;
+use App\Services\DuplicateDetectionService;
+use App\Services\IpAnonymizer;
 
 class GrievanceService
 {
