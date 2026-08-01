@@ -20,7 +20,7 @@ export default function PendingComments({ comments }) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
         <h1 className="text-xl font-bold text-gray-900 mb-6">Pending Comments</h1>
 
-        <div className="bg-white rounded-xl border border-gray-200/60 overflow-hidden">
+        <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
           <table className="w-full text-sm">
             <thead className="bg-gray-50 border-b border-gray-200">
               <tr>

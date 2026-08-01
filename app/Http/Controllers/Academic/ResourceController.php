@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Academic;
 use App\Http\Requests\StoreResourceRequest;
 use App\Http\Requests\UpdateResourceRequest;
 use App\Models\Academic\Resource;
-use App\Models\Academic\Subject;
 use App\Events\ResourceUploaded;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -21,27 +20,14 @@ class ResourceController extends Controller
             ->latest()
             ->paginate(20);
 
+        $subjects = Auth::user()->subjectOptions()
+            ->with('semester.institution')
+            ->get();
+
         return inertia('Resources/Index', [
             'resources' => $resources,
+            'subjects' => $subjects,
         ]);
-    }
-
-    public function create()
-    {
-        $user = Auth::user();
-
-        if ($user->isTeacher()) {
-            $subjects = $user->taughtSubjects()->with('semester.institution')->get();
-        } elseif ($user->isInstitutionAdmin()) {
-            $institutionIds = $user->institutions()->pluck('institutions.id');
-            $subjects = Subject::whereHas('semester', function ($q) use ($institutionIds) {
-                $q->whereIn('institution_id', $institutionIds);
-            })->with('semester.institution')->get();
-        } else {
-            $subjects = Subject::with('semester.institution')->get();
-        }
-
-        return inertia('Resources/Create', ['subjects' => $subjects]);
     }
 
     public function store(StoreResourceRequest $request)
@@ -75,15 +61,6 @@ class ResourceController extends Controller
 
         return redirect()->route('resources.index')
             ->with('success', 'Resource created successfully.');
-    }
-
-    public function edit(Resource $resource)
-    {
-        $this->authorize('update', $resource);
-
-        return inertia('Resources/Edit', [
-            'resource' => $resource->load('subject'),
-        ]);
     }
 
     public function update(UpdateResourceRequest $request, Resource $resource)

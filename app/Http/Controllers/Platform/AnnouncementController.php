@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Platform;
 use App\Http\Requests\StoreAnnouncementRequest;
 use App\Http\Requests\UpdateAnnouncementRequest;
 use App\Models\Platform\Announcement;
-use App\Models\Academic\Subject;
 use App\Events\AnnouncementPublished;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -21,27 +20,14 @@ class AnnouncementController extends Controller
             ->latest()
             ->paginate(20);
 
+        $subjects = Auth::user()->subjectOptions()
+            ->with('semester.institution')
+            ->get();
+
         return inertia('Announcements/Index', [
             'announcements' => $announcements,
+            'subjects' => $subjects,
         ]);
-    }
-
-    public function create()
-    {
-        $user = Auth::user();
-
-        if ($user->isTeacher()) {
-            $subjects = $user->taughtSubjects()->with('semester.institution')->get();
-        } elseif ($user->isInstitutionAdmin()) {
-            $institutionIds = $user->institutions()->pluck('institutions.id');
-            $subjects = Subject::whereHas('semester', function ($q) use ($institutionIds) {
-                $q->whereIn('institution_id', $institutionIds);
-            })->with('semester.institution')->get();
-        } else {
-            $subjects = Subject::with('semester.institution')->get();
-        }
-
-        return inertia('Announcements/Create', ['subjects' => $subjects]);
     }
 
     public function store(StoreAnnouncementRequest $request)
@@ -70,15 +56,6 @@ class AnnouncementController extends Controller
 
         return redirect()->route('announcements.index')
             ->with('success', 'Announcement created successfully.');
-    }
-
-    public function edit(Announcement $announcement)
-    {
-        $this->authorize('update', $announcement);
-
-        return inertia('Announcements/Edit', [
-            'announcement' => $announcement->load('subject'),
-        ]);
     }
 
     public function update(UpdateAnnouncementRequest $request, Announcement $announcement)

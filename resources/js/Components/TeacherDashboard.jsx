@@ -65,7 +65,7 @@ export default function TeacherDashboard({ stats, recentSubmissions = [], recent
                         <i className="fa-solid fa-clipboard-list text-gray-400" /> New Assignment
                     </Link>
                     <Link
-                        href={route('questions.create')}
+                        href={route('announcements.index')}
                         className="flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition-all hover:bg-indigo-700"
                     >
                         <i className="fa-solid fa-bullhorn" /> Post Announcement

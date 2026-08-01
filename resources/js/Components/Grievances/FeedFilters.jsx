@@ -14,11 +14,9 @@ export default function FeedFilters({ categories, filters = {} }) {
   }
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200/60 p-3 sm:p-4 flex flex-wrap items-center gap-2 sm:gap-3">
+    <div className="bg-white rounded-xl border border-gray-200 p-3 sm:p-4 flex flex-wrap items-center gap-2 sm:gap-3">
       <div className="flex items-center gap-1.5 flex-1 min-w-[160px]">
-        <svg className="w-4 h-4 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-        </svg>
+        <i className="fa-solid fa-magnifying-glass text-gray-400 text-xs shrink-0"></i>
         <input type="text" defaultValue={filters.search || ''} placeholder="Search grievances..."
           onKeyDown={e => e.key === 'Enter' && updateFilter('search', e.target.value)}
           className="w-full text-xs border-0 outline-none focus:ring-0 p-0 bg-transparent text-gray-700 placeholder-gray-400" />

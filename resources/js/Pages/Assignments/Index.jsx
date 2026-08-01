@@ -6,82 +6,109 @@ export default function Index({ assignments }) {
     const isStudent = auth.user.role === 'student';
 
     return (
-        <AuthenticatedLayout
-            header={
-                <div className="flex items-center justify-between">
-                    <h2 className="text-xl font-semibold leading-tight text-gray-800">Assignments</h2>
+        <AuthenticatedLayout>
+            <Head title="Assignments" />
+
+            <div className="max-w-4xl mx-auto px-4 sm:px-6 py-6">
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+                    <div>
+                        <h1 className="text-2xl font-bold text-gray-900">Assignments</h1>
+                        <p className="text-sm text-gray-500 mt-1">Track, submit, and grade assignments for your subjects.</p>
+                    </div>
                     {!isStudent && (
                         <Link
                             href={route('assignments.create')}
-                            className="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 focus:outline-none transition"
+                            className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 transition-colors shadow-sm"
                         >
+                            <i className="fa-solid fa-plus text-xs"></i>
                             Create Assignment
                         </Link>
                     )}
                 </div>
-            }
-        >
-            <Head title="Assignments" />
 
-            <div className="py-12">
-                <div className="mx-auto max-w-4xl sm:px-6 lg:px-8">
-                    {assignments.data.length === 0 ? (
-                        <div className="text-center py-12">
-                            <p className="text-gray-500 text-lg">No assignments yet.</p>
-                            {!isStudent && (
-                                <Link
-                                    href={route('assignments.create')}
-                                    className="mt-2 inline-block text-indigo-600 hover:text-indigo-800"
-                                >
-                                    Create the first assignment
-                                </Link>
-                            )}
+                {assignments.data.length === 0 ? (
+                    <div className="text-center py-16 bg-white rounded-xl border border-gray-200">
+                        <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4 text-gray-400">
+                            <i className="fa-solid fa-clipboard-list text-2xl"></i>
                         </div>
-                    ) : (
-                        <div className="space-y-4">
-                            {assignments.data.map((assignment) => (
+                        <p className="text-gray-500">No assignments yet.</p>
+                        {!isStudent && (
+                            <Link
+                                href={route('assignments.create')}
+                                className="text-indigo-600 hover:text-indigo-800 text-sm mt-2 inline-block"
+                            >
+                                Create the first assignment
+                            </Link>
+                        )}
+                    </div>
+                ) : (
+                    <div className="space-y-4">
+                        {assignments.data.map((assignment) => {
+                            const pastDue = assignment.due_date && new Date(assignment.due_date) < new Date();
+                            return (
                                 <Link
                                     key={assignment.id}
                                     href={route('assignments.show', assignment.id)}
-                                    className="block bg-white rounded-lg shadow-sm border border-gray-200 p-5 hover:border-indigo-300 transition-colors"
+                                    className="block bg-white rounded-xl border border-gray-200 shadow-sm p-5 hover:border-indigo-300 hover:shadow-md transition-all"
                                 >
-                                    <div className="flex items-start justify-between">
-                                        <div>
-                                            <h3 className="text-lg font-semibold text-gray-900">{assignment.title}</h3>
-                                            <p className="text-sm text-gray-600 mt-1 line-clamp-2">{assignment.description}</p>
+                                    <div className="flex items-start justify-between gap-4">
+                                        <div className="flex items-start gap-4 min-w-0">
+                                            <div className="shrink-0 w-11 h-11 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center">
+                                                <i className="fa-solid fa-file-lines"></i>
+                                            </div>
+                                            <div className="min-w-0">
+                                                <h3 className="text-lg font-bold text-gray-900 truncate">{assignment.title}</h3>
+                                                <p className="text-sm text-gray-600 mt-1 line-clamp-2">{assignment.description}</p>
+                                                <div className="mt-3 flex flex-wrap items-center gap-4 text-xs text-gray-500">
+                                                    <span className="inline-flex items-center gap-1.5">
+                                                        <i className="fa-solid fa-book-open text-gray-400"></i>
+                                                        {assignment.subject?.name}
+                                                    </span>
+                                                    <span className="inline-flex items-center gap-1.5">
+                                                        <i className={`fa-solid fa-clock ${pastDue ? 'text-red-500' : 'text-gray-400'}`}></i>
+                                                        Due: {new Date(assignment.due_date).toLocaleDateString()}
+                                                    </span>
+                                                    <span className="inline-flex items-center gap-1.5">
+                                                        <i className="fa-solid fa-user text-gray-400"></i>
+                                                        {assignment.teacher?.name}
+                                                    </span>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div className="text-right text-sm text-gray-500 shrink-0 ml-4">
-                                            <div>{assignment.subject?.name}</div>
-                                            <div className="mt-1">{assignment.max_score ? `${assignment.max_score} pts` : 'No score'}</div>
+                                        <div className="text-right shrink-0 flex flex-col items-end gap-2">
+                                            {assignment.max_score && (
+                                                <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 text-emerald-700 px-2.5 py-1 text-xs font-semibold">
+                                                    <i className="fa-solid fa-star text-[10px]"></i>
+                                                    {assignment.max_score} pts
+                                                </span>
+                                            )}
+                                            <span className={`text-[11px] font-medium ${assignment.allow_late_submission ? 'text-amber-600' : 'text-gray-400'}`}>
+                                                {assignment.allow_late_submission ? 'Late OK' : 'No late'}
+                                            </span>
                                         </div>
-                                    </div>
-                                    <div className="mt-3 flex items-center gap-4 text-xs text-gray-500">
-                                        <span>Due: {new Date(assignment.due_date).toLocaleDateString()}</span>
-                                        <span>By: {assignment.teacher?.name}</span>
-                                        <span>{assignment.allow_late_submission ? 'Late OK' : 'No late'}</span>
                                     </div>
                                 </Link>
-                            ))}
-                        </div>
-                    )}
+                            );
+                        })}
+                    </div>
+                )}
 
-                    {assignments.total > assignments.per_page && (
-                        <div className="mt-6 flex justify-center gap-2">
-                            {assignments.links.map((link, i) => (
-                                <Link
-                                    key={i}
-                                    href={link.url || '#'}
-                                    className={`px-3 py-1 text-sm rounded ${
-                                        link.active
-                                            ? 'bg-indigo-600 text-white'
-                                            : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
-                                    }`}
-                                    dangerouslySetInnerHTML={{ __html: link.label }}
-                                />
-                            ))}
-                        </div>
-                    )}
-                </div>
+                {assignments.total > assignments.per_page && (
+                    <div className="mt-6 flex justify-center gap-2">
+                        {assignments.links.map((link, i) => (
+                            <Link
+                                key={i}
+                                href={link.url || '#'}
+                                className={`px-3 py-1.5 text-sm rounded-lg transition-colors ${
+                                    link.active
+                                        ? 'bg-indigo-600 text-white'
+                                        : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
+                                }`}
+                                dangerouslySetInnerHTML={{ __html: link.label }}
+                            />
+                        ))}
+                    </div>
+                )}
             </div>
         </AuthenticatedLayout>
     );

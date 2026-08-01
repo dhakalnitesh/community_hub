@@ -87,7 +87,7 @@ export default function Dashboard({ stats, recentSubmissions, recentQuestions })
                             </div>
                         </Link>
                         <Link
-                            href={route('questions.create')}
+                            href={route('questions.index')}
                             className="flex items-start gap-3 p-4 bg-emerald-50 rounded-lg border border-emerald-100 hover:bg-emerald-100 transition-colors"
                         >
                             <div className="w-10 h-10 rounded-lg bg-white text-emerald-600 flex items-center justify-center"><i className="fa-solid fa-plus"></i></div>

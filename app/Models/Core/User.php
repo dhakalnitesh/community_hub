@@ -114,4 +114,25 @@ class User extends Authenticatable
     {
         return $this->role === 'student';
     }
+
+    /**
+     * Subjects the user is authorized to post to (for create/edit forms).
+     * - teacher: only subjects they are assigned to
+     * - institution_admin: all subjects in their institutions
+     * - super_admin/student: all subjects
+     */
+    public function subjectOptions(): \Illuminate\Database\Eloquent\Builder
+    {
+        if ($this->isTeacher()) {
+            return Subject::whereHas('teachers', fn ($q) => $q->where('teacher_id', $this->id));
+        }
+
+        if ($this->isInstitutionAdmin()) {
+            $institutionIds = $this->institutions()->pluck('institutions.id');
+
+            return Subject::whereHas('semester', fn ($q) => $q->whereIn('institution_id', $institutionIds));
+        }
+
+        return Subject::query();
+    }
 }

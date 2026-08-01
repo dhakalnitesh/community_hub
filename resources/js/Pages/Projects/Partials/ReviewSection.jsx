@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useForm } from '@inertiajs/react';
-import { MessageSquare, Star, Send, Loader2 } from 'lucide-react';
 
 export default function ReviewSection({ project, auth }) {
     const [isExpanded, setIsExpanded] = useState(false);
@@ -9,7 +8,7 @@ export default function ReviewSection({ project, auth }) {
         is_endorsed: false,
     });
 
-    const isTeacherOrAdmin = auth.user.roles?.includes('teacher') || auth.user.roles?.includes('institution_admin') || auth.user.roles?.includes('super_admin') || true; // Adjust based on roles logic
+    const isTeacherOrAdmin = ['teacher', 'institution_admin', 'super_admin'].includes(auth.user.role);
 
     const submit = (e) => {
         e.preventDefault();
@@ -25,7 +24,7 @@ export default function ReviewSection({ project, auth }) {
                 onClick={() => setIsExpanded(!isExpanded)}
                 className="flex items-center gap-1 text-sm text-indigo-600 hover:text-indigo-800 font-medium transition"
             >
-                <MessageSquare size={16} /> 
+                <i className="fa-regular fa-message"></i>
                 {project.reviews?.length || 0} {project.reviews?.length === 1 ? 'Review' : 'Reviews'}
             </button>
 
@@ -41,7 +40,7 @@ export default function ReviewSection({ project, auth }) {
                                     <div className="flex justify-between items-start mb-1">
                                         <span className="font-semibold text-gray-900 flex items-center gap-1">
                                             {review.user.name}
-                                            {review.is_endorsed && <Star size={12} className="text-amber-500 fill-amber-500" />}
+                                            {review.is_endorsed && <i className="fa-solid fa-star text-amber-500" />}
                                         </span>
                                     </div>
                                     <p className="text-gray-700">{review.content}</p>
@@ -72,14 +71,14 @@ export default function ReviewSection({ project, auth }) {
                                         onChange={e => setData('is_endorsed', e.target.checked)}
                                         className="rounded border-gray-300 text-amber-500 focus:ring-amber-500"
                                     />
-                                    <span className="flex items-center gap-1">Endorse Project <Star size={14} className="text-amber-500" /></span>
+                                    <span className="flex items-center gap-1">Endorse Project <i className="fa-solid fa-star text-amber-500" /></span>
                                 </label>
                                 <button 
                                     type="submit" 
                                     disabled={processing}
                                     className="inline-flex items-center px-3 py-1.5 bg-indigo-600 text-white text-xs font-semibold rounded hover:bg-indigo-700 disabled:opacity-50 transition"
                                 >
-                                    {processing ? <Loader2 size={14} className="animate-spin mr-1" /> : <Send size={14} className="mr-1" />}
+                                    {processing ? <i className="fa-solid fa-spinner fa-spin mr-1" /> : <i className="fa-solid fa-paper-plane mr-1" />}
                                     Submit
                                 </button>
                             </div>

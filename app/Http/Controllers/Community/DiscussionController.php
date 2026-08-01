@@ -58,17 +58,6 @@ class DiscussionController extends Controller
         ]);
     }
 
-    public function create()
-    {
-        $user = Auth::user();
-
-        $subjects = Subject::accessibleByUser($user)
-            ->with('semester.institution')
-            ->get();
-
-        return inertia('Questions/Create', ['subjects' => $subjects]);
-    }
-
     public function store(StoreDiscussionRequest $request)
     {
         $this->authorize('create', Discussion::class);
@@ -166,15 +155,6 @@ class DiscussionController extends Controller
                 'update' => $user->can('update', $discussion),
                 'delete' => $user->can('delete', $discussion),
             ],
-        ]);
-    }
-
-    public function edit(Discussion $discussion)
-    {
-        $this->authorize('update', $discussion);
-
-        return inertia('Questions/Edit', [
-            'discussion' => $discussion->load('discussionable'),
         ]);
     }
 

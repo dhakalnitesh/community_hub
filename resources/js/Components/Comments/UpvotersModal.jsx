@@ -17,14 +17,12 @@ export default function UpvotersModal({ upvoters = [], onClose }) {
   return (
     <div onClick={(e) => { if (e.target === e.currentTarget) onClose?.(); }}
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
-      <div className="bg-white rounded-2xl shadow-xl w-full max-w-sm max-h-[70vh] overflow-hidden flex flex-col">
-        <div className="flex items-center justify-between px-5 py-3 border-b border-gray-100">
+      <div className="bg-white rounded-xl shadow-2xl w-full max-w-sm max-h-[70vh] overflow-hidden flex flex-col">
+        <div className="flex items-center justify-between px-5 py-3 border-b bg-slate-50 border-gray-200">
           <h2 className="text-sm font-bold text-gray-900">Reactions ({upvoters.length})</h2>
           <button onClick={onClose}
             className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-gray-100 text-gray-400 hover:text-gray-600 transition-all">
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
+            <i className="fa-solid fa-xmark"></i>
           </button>
         </div>
         <div className="flex-1 overflow-y-auto p-4 space-y-2">

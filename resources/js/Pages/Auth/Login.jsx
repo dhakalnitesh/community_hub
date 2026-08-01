@@ -80,7 +80,7 @@ export default function Login({ status, canResetPassword }) {
                         </Link>
                     </div>
 
-                    <div className="bg-white rounded-2xl shadow-xl shadow-gray-200/40 border border-gray-100 p-8 sm:p-10">
+                    <div className="bg-white rounded-xl shadow-lg shadow-gray-200/50 border border-gray-200 p-8 sm:p-10">
                         <div className="mb-8">
                             <h2 className="text-2xl font-bold text-gray-900 mb-2">Welcome back</h2>
                             <p className="text-sm text-gray-500 font-medium">Please enter your credentials to sign in.</p>
@@ -193,7 +193,7 @@ export default function Login({ status, canResetPassword }) {
                             <button
                                 type="submit"
                                 disabled={processing}
-                                className="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white text-sm font-semibold shadow-lg shadow-indigo-600/25 transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2 group mt-2"
+                                className="w-full py-2.5 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold shadow-lg shadow-indigo-600/25 transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2 group mt-2"
                             >
                                 {processing ? (
                                     <>

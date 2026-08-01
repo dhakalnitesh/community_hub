@@ -19,7 +19,7 @@ export default function Track({ grievance, error }) {
       <Head title={`${t('status.title')}`} />
 
       <div className="max-w-lg mx-auto px-4 sm:px-6 py-6 sm:py-12">
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-200/60 p-5 sm:p-7">
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-5 sm:p-7">
           <div className="text-center mb-5">
             <h1 className="text-xl sm:text-2xl font-bold text-gray-900">{t('status.title')}</h1>
             <p className="text-xs sm:text-sm text-gray-500 mt-1">{t('status.desc')}</p>

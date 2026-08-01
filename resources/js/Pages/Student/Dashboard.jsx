@@ -61,7 +61,7 @@ export default function Dashboard({ stats }) {
                                 <div className="flex-1">
                                     <h4 className="text-lg font-bold text-gray-900 mb-2">Community Discussions</h4>
                                     <p className="text-sm text-gray-500 mb-6">Connect with peers and teachers. Ask questions or help others solve problems.</p>
-                                    <Link href={route('questions.create')} className="inline-flex items-center gap-2 bg-indigo-600 text-white text-sm font-medium px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors">
+                                    <Link href={route('questions.index')} className="inline-flex items-center gap-2 bg-indigo-600 text-white text-sm font-medium px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors">
                                         <i className="fa-solid fa-plus text-xs"></i> New Discussion
                                     </Link>
                                 </div>

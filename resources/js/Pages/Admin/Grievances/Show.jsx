@@ -54,7 +54,7 @@ export default function Show({ grievance, staff }) {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 space-y-5">
-            <div className="bg-white rounded-xl border border-gray-200/60 p-5">
+            <div className="bg-white rounded-xl border border-gray-200 p-5">
               <h1 className="text-lg font-bold text-gray-900">{grievance.title}</h1>
               <p className="text-sm text-gray-700 mt-3 whitespace-pre-wrap">{grievance.description}</p>
 
@@ -86,7 +86,7 @@ export default function Show({ grievance, staff }) {
             </div>
 
             {grievance.events && grievance.events.length > 0 && (
-              <div className="bg-white rounded-xl border border-gray-200/60 p-5">
+              <div className="bg-white rounded-xl border border-gray-200 p-5">
                 <h2 className="text-sm font-bold text-gray-900 mb-3">Events</h2>
                 <div className="space-y-2">
                   {grievance.events.slice(0, 20).map((event, i) => (
@@ -104,7 +104,7 @@ export default function Show({ grievance, staff }) {
           </div>
 
           <div className="space-y-4">
-            <div className="bg-white rounded-xl border border-gray-200/60 p-4">
+            <div className="bg-white rounded-xl border border-gray-200 p-4">
               <h2 className="text-xs font-bold text-gray-900 mb-3 uppercase tracking-wider">Actions</h2>
 
               <div className="space-y-3">
@@ -155,7 +155,7 @@ export default function Show({ grievance, staff }) {
               </div>
             </div>
 
-            <div className="bg-white rounded-xl border border-gray-200/60 p-4">
+            <div className="bg-white rounded-xl border border-gray-200 p-4">
               <h2 className="text-xs font-bold text-gray-900 mb-3 uppercase tracking-wider">Stats</h2>
               <div className="space-y-1 text-xs">
                 <p className="flex justify-between"><span className="text-gray-500">Upvotes</span><span>{grievance.upvotes_count}</span></p>

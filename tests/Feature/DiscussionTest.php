@@ -86,7 +86,6 @@ class DiscussionTest extends TestCase
     public function test_guest_cannot_view_questions(): void
     {
         $this->get(route('questions.index'))->assertRedirect(route('login'));
-        $this->get(route('questions.create'))->assertRedirect(route('login'));
     }
 
     public function test_guest_cannot_view_single_question(): void
@@ -347,16 +346,6 @@ class DiscussionTest extends TestCase
             ->assertInertia(fn ($page) => $page
                 ->component('Questions/Show')
                 ->has('discussion')
-            );
-    }
-
-    public function test_questions_create_page_renders(): void
-    {
-        $this->actingAs($this->studentJava)
-            ->get(route('questions.create'))
-            ->assertInertia(fn ($page) => $page
-                ->component('Questions/Create')
-                ->has('subjects')
             );
     }
 

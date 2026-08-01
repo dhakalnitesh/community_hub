@@ -74,11 +74,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 Route::middleware('auth')->prefix('questions')->name('questions.')->group(function () {
     Route::get('/', [DiscussionController::class, 'index'])->name('index');
-    Route::get('/create', [DiscussionController::class, 'create'])->name('create');
     Route::post('/', [DiscussionController::class, 'store'])->name('store');
     Route::post('/track', [DiscussionController::class, 'track'])->name('track');
     Route::get('/{discussion}', [DiscussionController::class, 'show'])->name('show');
-    Route::get('/{discussion}/edit', [DiscussionController::class, 'edit'])->name('edit');
     Route::put('/{discussion}', [DiscussionController::class, 'update'])->name('update');
     Route::delete('/{discussion}', [DiscussionController::class, 'destroy'])->name('destroy');
 
@@ -133,8 +131,8 @@ Route::middleware(['auth', 'role:super_admin|institution_admin'])->prefix('admin
 
 Route::middleware('auth')->post('/enroll', [EnrollmentController::class, 'enroll'])->name('enroll');
 
-Route::resource('resources', App\Http\Controllers\Academic\ResourceController::class)->middleware(['auth', 'verified']);
-Route::resource('announcements', App\Http\Controllers\Platform\AnnouncementController::class)->middleware(['auth', 'verified']);
+Route::resource('resources', App\Http\Controllers\Academic\ResourceController::class)->except(['create', 'edit'])->middleware(['auth', 'verified']);
+Route::resource('announcements', App\Http\Controllers\Platform\AnnouncementController::class)->except(['create', 'edit'])->middleware(['auth', 'verified']);
 
 require __DIR__ . '/auth.php';
 
