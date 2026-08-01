@@ -16,7 +16,7 @@ class MentorSessionController extends Controller
         $this->authorize('viewAny', MentorSession::class);
 
         // Show open requests and the current user's mentoring activity
-        $openRequests = MentorSession::with('discussion:id,title,anonymous_name')
+        $openRequests = MentorSession::with('discussion:id,title,user_id,is_anonymous')
             ->where('status', 'requested')
             ->latest()
             ->get();

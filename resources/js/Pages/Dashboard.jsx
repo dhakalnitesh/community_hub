@@ -39,6 +39,14 @@ export default function Dashboard({ stats, recentSubmissions, recentQuestions })
         );
     }
 
+    const fallbackStats = stats || { questions: 0, answers: 0, subjects: 0, grievances: 0, open_grievances: 0, resolved_grievances: 0, critical_grievances: 0 };
+    const metrics = [
+        { name: 'Questions', value: fallbackStats.questions, icon: 'fa-comments', color: 'bg-indigo-50 text-indigo-600' },
+        { name: 'Answers', value: fallbackStats.answers, icon: 'fa-reply', color: 'bg-emerald-50 text-emerald-600' },
+        { name: 'Subjects', value: fallbackStats.subjects, icon: 'fa-book-open', color: 'bg-sky-50 text-sky-600' },
+        { name: 'Grievances', value: fallbackStats.grievances, icon: 'fa-flag', color: 'bg-red-50 text-red-600', sub: `${fallbackStats.open_grievances} open · ${fallbackStats.resolved_grievances} resolved` },
+    ];
+
     return (
         <AuthenticatedLayout
             header={
@@ -47,52 +55,47 @@ export default function Dashboard({ stats, recentSubmissions, recentQuestions })
         >
             <Head title="Dashboard" />
 
-            <div className="py-12">
-                <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                        <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-                            <div className="text-3xl font-bold text-indigo-600">{stats.questions}</div>
-                            <div className="text-sm text-gray-500 mt-1">Questions</div>
-                        </div>
-                        <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-                            <div className="text-3xl font-bold text-green-600">{stats.answers}</div>
-                            <div className="text-sm text-gray-500 mt-1">Answers</div>
-                        </div>
-                        <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-                            <div className="text-3xl font-bold text-blue-600">{stats.subjects}</div>
-                            <div className="text-sm text-gray-500 mt-1">Subjects</div>
-                        </div>
-                        <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-                            <div className="text-3xl font-bold text-red-600">{stats.grievances}</div>
-                            <div className="text-sm text-gray-500 mt-1">Grievances</div>
-                            <div className="text-xs text-gray-400 mt-1">{stats.open_grievances} open · {stats.resolved_grievances} resolved</div>
-                        </div>
-                        <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-                            <div className="text-3xl font-bold text-orange-600">{stats.critical_grievances}</div>
-                            <div className="text-sm text-gray-500 mt-1">Critical</div>
-                        </div>
-                    </div>
-
-                    <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                        <div className="p-6 text-gray-900">
-                            <h3 className="text-lg font-semibold mb-4">Quick Actions</h3>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                <Link
-                                    href={route('questions.index')}
-                                    className="p-4 bg-indigo-50 rounded-lg border border-indigo-100 hover:bg-indigo-100 transition-colors"
-                                >
-                                    <div className="font-medium text-indigo-700">Browse Questions</div>
-                                    <div className="text-sm text-indigo-500 mt-1">View and answer questions in your subjects</div>
-                                </Link>
-                                <Link
-                                    href={route('questions.create')}
-                                    className="p-4 bg-green-50 rounded-lg border border-green-100 hover:bg-green-100 transition-colors"
-                                >
-                                    <div className="font-medium text-green-700">Ask a Question</div>
-                                    <div className="text-sm text-green-500 mt-1">Post anonymously or publicly</div>
-                                </Link>
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-8">
+                    {metrics.map((metric) => (
+                        <div key={metric.name} className="bg-white rounded-xl border border-gray-200 p-5 flex items-start gap-4">
+                            <div className={`w-11 h-11 rounded-lg flex items-center justify-center text-lg ${metric.color}`}>
+                                <i className={`fa-solid ${metric.icon}`}></i>
+                            </div>
+                            <div className="min-w-0">
+                                <p className="text-[10px] uppercase tracking-wider text-gray-500 font-medium">{metric.name}</p>
+                                <p className="text-2xl font-bold text-gray-900 mt-1">{metric.value}</p>
+                                {metric.sub && <p className="text-xs text-gray-500 mt-0.5">{metric.sub}</p>}
                             </div>
                         </div>
+                    ))}
+                </div>
+
+                <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+                    <div className="px-5 py-4 border-b border-gray-200">
+                        <h3 className="font-semibold text-gray-900">Quick Actions</h3>
+                    </div>
+                    <div className="p-5 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <Link
+                            href={route('questions.index')}
+                            className="flex items-start gap-3 p-4 bg-indigo-50 rounded-lg border border-indigo-100 hover:bg-indigo-100 transition-colors"
+                        >
+                            <div className="w-10 h-10 rounded-lg bg-white text-indigo-600 flex items-center justify-center"><i className="fa-solid fa-comments"></i></div>
+                            <div>
+                                <div className="font-medium text-indigo-700">Browse Questions</div>
+                                <div className="text-sm text-indigo-500 mt-1">View and answer questions in your subjects</div>
+                            </div>
+                        </Link>
+                        <Link
+                            href={route('questions.create')}
+                            className="flex items-start gap-3 p-4 bg-emerald-50 rounded-lg border border-emerald-100 hover:bg-emerald-100 transition-colors"
+                        >
+                            <div className="w-10 h-10 rounded-lg bg-white text-emerald-600 flex items-center justify-center"><i className="fa-solid fa-plus"></i></div>
+                            <div>
+                                <div className="font-medium text-emerald-700">Ask a Question</div>
+                                <div className="text-sm text-emerald-500 mt-1">Post anonymously or publicly</div>
+                            </div>
+                        </Link>
                     </div>
                 </div>
             </div>

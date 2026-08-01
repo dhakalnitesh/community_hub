@@ -1,245 +1,101 @@
 import { Link, usePage } from '@inertiajs/react';
 import { route } from 'ziggy-js';
 
+const actions = [
+    { name: 'Institutions', description: 'Manage tenants & onboarding', icon: 'fa-building-columns', href: 'admin.institutions', color: 'bg-indigo-50 text-indigo-600' },
+    { name: 'Users', description: 'Search & manage all accounts', icon: 'fa-users', href: 'admin.users', color: 'bg-emerald-50 text-emerald-600' },
+    { name: 'Roles & Permissions', description: 'Assign roles and guards', icon: 'fa-shield-halved', href: 'admin.roles', color: 'bg-amber-50 text-amber-600' },
+    { name: 'Analytics', description: 'Platform wide insights', icon: 'fa-chart-line', href: 'admin.analytics', color: 'bg-sky-50 text-sky-600' },
+    { name: 'Reports', description: 'Generate & export reports', icon: 'fa-file-lines', href: 'admin.reports', color: 'bg-violet-50 text-violet-600' },
+    { name: 'Monitoring', description: 'System health & alerts', icon: 'fa-heart-pulse', href: 'admin.monitoring', color: 'bg-rose-50 text-rose-600' },
+];
+
 export default function SuperAdminDashboard({ stats }) {
     const user = usePage().props.auth.user;
 
-    return (
-        <div className="p-6 max-w-7xl mx-auto w-full min-h-screen pb-24">
-            {/* Header Section */}
-            <div className="mb-8">
-                <h2 className="font-headline-lg text-headline-lg text-on-surface">Welcome back, {user?.name || 'Admin'} 👋</h2>
-                <p className="text-body-lg text-on-surface-variant">Monitor and manage your education platform.</p>
-            </div>
+    const metrics = [
+        { name: 'Total Subjects', value: stats?.subjects || 0, icon: 'fa-book-open', color: 'bg-indigo-50 text-indigo-600', href: null },
+        { name: 'Questions', value: stats?.questions || 0, icon: 'fa-comments', color: 'bg-sky-50 text-sky-600', href: null },
+        { name: 'Answers', value: stats?.answers || 0, icon: 'fa-reply', color: 'bg-emerald-50 text-emerald-600', href: null },
+        { name: 'Open Grievances', value: stats?.open_grievances || 0, icon: 'fa-flag', color: 'bg-red-50 text-red-600', href: 'admin.grievances.index', sub: `${stats?.resolved_grievances || 0} resolved · ${stats?.critical_grievances || 0} critical` },
+    ];
 
-            {/* Top Metric Cards (Asymmetric Bento) */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-                <div className="glass-card p-6 rounded-xl flex flex-col justify-between group hover:border-primary/30 transition-all">
-                    <div>
-                        <div className="w-12 h-12 bg-primary-container/20 rounded-lg flex items-center justify-center mb-4">
-                            <span className="material-symbols-outlined text-primary">domain</span>
-                        </div>
-                        <p className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Total Institutions</p>
-                        <h3 className="text-[32px] font-bold text-on-surface mt-1">245</h3>
-                    </div>
+    return (
+        <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 py-6">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+                <div>
+                    <h1 className="text-2xl font-bold text-gray-900">Platform Overview</h1>
+                    <p className="text-sm text-gray-500 mt-1">Monitor and manage your education platform.</p>
                 </div>
-                <div className="glass-card p-6 rounded-xl flex flex-col justify-between group hover:border-primary/30 transition-all">
-                    <div>
-                        <div className="w-12 h-12 bg-secondary-container/20 rounded-lg flex items-center justify-center mb-4">
-                            <span className="material-symbols-outlined text-secondary">group</span>
-                        </div>
-                        <p className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Total Students</p>
-                        <h3 className="text-[32px] font-bold text-on-surface mt-1">52,430</h3>
-                    </div>
-                </div>
-                <div className="glass-card p-6 rounded-xl flex flex-col justify-between group hover:border-primary/30 transition-all">
-                    <div>
-                        <div className="w-12 h-12 bg-tertiary-container/20 rounded-lg flex items-center justify-center mb-4">
-                            <span className="material-symbols-outlined text-tertiary">person</span>
-                        </div>
-                        <p className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Total Teachers</p>
-                        <h3 className="text-[32px] font-bold text-on-surface mt-1">4,820</h3>
-                    </div>
-                </div>
-                <div className="glass-card p-6 rounded-xl flex flex-col justify-between group hover:border-primary/30 transition-all">
-                    <div>
-                        <div className="w-12 h-12 bg-primary-container/20 rounded-lg flex items-center justify-center mb-4">
-                            <span className="material-symbols-outlined text-primary">bolt</span>
-                        </div>
-                        <p className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Active Users Today</p>
-                        <h3 className="text-[32px] font-bold text-on-surface mt-1">12,450</h3>
-                    </div>
-                </div>
-                <Link href={route('admin.grievances.index')} className="glass-card p-6 rounded-xl flex flex-col justify-between group hover:border-red-300 transition-all">
-                    <div>
-                        <div className="w-12 h-12 bg-red-50 rounded-lg flex items-center justify-center mb-4">
-                            <span className="material-symbols-outlined text-red-500">report</span>
-                        </div>
-                        <p className="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Grievances</p>
-                        <h3 className="text-[32px] font-bold text-on-surface mt-1">{stats?.grievances || 0}</h3>
-                        <p className="text-xs text-gray-500 mt-1">{stats?.open_grievances || 0} open · {stats?.resolved_grievances || 0} resolved</p>
-                    </div>
+                <Link href={route('admin.institutions')} className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 transition-colors">
+                    <i className="fa-solid fa-plus text-xs"></i> New Institution
                 </Link>
             </div>
 
-            {/* Main Layout Grid */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                
-                {/* System Health & Live Insights (Column 1 & 2) */}
-                <div className="lg:col-span-2 space-y-6">
-                    {/* System Resources Section */}
-                    <section className="bg-white glass-card rounded-xl p-6">
-                        <h4 className="font-title-md text-title-md mb-4 flex items-center gap-1">
-                            <span className="material-symbols-outlined text-primary">memory</span>
-                            System Health & Resources
-                        </h4>
-                        <div className="space-y-4">
-                            <div className="p-4 bg-white rounded-lg border border-outline-variant/20 flex flex-col gap-2">
-                                <div className="flex justify-between items-center mb-1">
-                                    <span className="text-on-surface font-label-md font-bold uppercase">CPU Usage</span>
-                                    <span className="text-[10px] text-on-surface-variant font-bold">42%</span>
-                                </div>
-                                <div className="w-full bg-surface-container-highest rounded-full h-2">
-                                    <div className="bg-primary h-2 rounded-full" style={{ width: '42%' }}></div>
-                                </div>
-                                <p className="text-body-sm font-medium text-on-surface-variant mt-1">Normal load across all production clusters.</p>
-                            </div>
-                            <div className="p-4 bg-white rounded-lg border border-outline-variant/20 flex flex-col gap-2">
-                                <div className="flex justify-between items-center mb-1">
-                                    <span className="text-on-surface font-label-md font-bold uppercase">Database Storage</span>
-                                    <span className="text-[10px] text-warning font-bold">78%</span>
-                                </div>
-                                <div className="w-full bg-surface-container-highest rounded-full h-2">
-                                    <div className="bg-tertiary h-2 rounded-full" style={{ width: '78%' }}></div>
-                                </div>
-                                <p className="text-body-sm font-medium text-on-surface-variant mt-1">Approaching threshold on main tenant database.</p>
-                            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
+                {metrics.map((metric) => (
+                    <div key={metric.name} className="bg-white rounded-xl border border-gray-200 p-5 flex items-start gap-4">
+                        <div className={`w-11 h-11 rounded-lg flex items-center justify-center text-lg ${metric.color}`}>
+                            <i className={`fa-solid ${metric.icon}`}></i>
                         </div>
-                    </section>
-
-                    {/* Institution Table */}
-                    <section className="glass-card rounded-xl p-6 mb-6">
-                        <h4 className="font-title-md text-title-md mb-4">Quick Actions</h4>
-                        <div className="grid grid-cols-1 gap-2">
-                            <button className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg font-label-md hover:opacity-90 transition-opacity">
-                                <span className="material-symbols-outlined text-[18px]">add_business</span>
-                                + Create Institution
-                            </button>
-                            <button className="flex items-center gap-2 px-4 py-2 border border-outline-variant/30 rounded-lg font-label-md hover:bg-surface-container-low transition-colors">
-                                <span className="material-symbols-outlined text-[18px]">person_add</span>
-                                + Create Platform Admin
-                            </button>
-                            <button className="flex items-center gap-2 px-4 py-2 border border-outline-variant/30 rounded-lg font-label-md hover:bg-surface-container-low transition-colors">
-                                <span className="material-symbols-outlined text-[18px]">assessment</span>
-                                View Reports
-                            </button>
+                        <div className="min-w-0">
+                            <p className="text-[10px] uppercase tracking-wider text-gray-500 font-medium">{metric.name}</p>
+                            <p className="text-2xl font-bold text-gray-900 mt-1">{metric.value}</p>
+                            {metric.sub && <p className="text-xs text-gray-500 mt-0.5">{metric.sub}</p>}
                         </div>
-                    </section>
-                    
-                    <section className="glass-card rounded-xl overflow-hidden">
-                        <div className="p-6 flex justify-between items-center bg-white">
-                            <h4 className="font-title-md text-title-md">Recent Institutions</h4>
-                            <div className="flex gap-2">
-                                <button className="px-4 py-1 rounded-lg border border-outline-variant/30 font-label-md hover:bg-surface-container-low">Filters</button>
-                                <button className="px-4 py-1 rounded-lg bg-surface-container-highest font-label-md">Export PDF</button>
-                            </div>
-                        </div>
-                        <div className="overflow-x-auto">
-                            <table className="w-full text-left border-collapse">
-                                <thead className="bg-surface-container-low border-y border-outline-variant/10">
-                                    <tr>
-                                        <th className="px-6 py-4 font-label-md text-on-surface-variant uppercase tracking-wider">Name</th>
-                                        <th className="px-6 py-4 font-label-md text-on-surface-variant uppercase tracking-wider">Type</th>
-                                        <th className="px-6 py-4 font-label-md text-on-surface-variant uppercase tracking-wider">Admin</th>
-                                        <th className="px-6 py-4 font-label-md text-on-surface-variant uppercase tracking-wider">Students</th>
-                                        <th className="px-6 py-4 font-label-md text-on-surface-variant uppercase tracking-wider">Status</th>
-                                        <th className="px-6 py-4 font-label-md text-on-surface-variant uppercase tracking-wider">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody className="divide-y divide-outline-variant/10">
-                                    <tr className="hover:bg-surface-container-low transition-colors group">
-                                        <td className="px-6 py-4 font-medium">Gomendra Multiple College</td>
-                                        <td className="px-6 py-4 text-body-sm">University</td>
-                                        <td className="px-6 py-4 text-body-sm">Dr. K. Sharma</td>
-                                        <td className="px-6 py-4 text-body-sm">1,240</td>
-                                        <td className="px-6 py-4">
-                                            <span className="px-2 py-1 rounded-full bg-primary-container/20 text-primary text-[10px] font-bold uppercase">Active</span>
-                                        </td>
-                                        <td className="px-6 py-4">
-                                            <button className="text-primary material-symbols-outlined">more_vert</button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </section>
-                </div>
-                
-                {/* Activity & Insights (Column 3) */}
-                <div className="space-y-6">
-                    {/* Active Alarms Chip Card */}
-                    <section className="glass-card rounded-xl p-6 bg-gradient-to-br from-error-container/30 to-transparent">
-                        <h4 className="font-title-md text-title-md mb-4 flex items-center gap-1">
-                            <span className="material-symbols-outlined text-error">warning</span>
-                            Active System Alarms
-                        </h4>
-                        <div className="space-y-4">
-                            <div className="p-4 bg-white rounded-lg border border-error/20 flex flex-col gap-1">
-                                <div className="flex justify-between items-center">
-                                    <span className="text-error font-label-md font-bold uppercase">High Latency</span>
-                                    <span className="text-[10px] text-on-surface-variant">API Gateway</span>
-                                </div>
-                                <p className="text-body-sm font-medium">Response times &gt; 500ms detected in US-East region.</p>
-                                <button className="mt-1 text-primary font-label-md self-start hover:underline">Investigate Logs</button>
-                            </div>
-                            <div className="p-4 bg-white rounded-lg border border-secondary/20 flex flex-col gap-1">
-                                <div className="flex justify-between items-center">
-                                    <span className="text-secondary font-label-md font-bold uppercase">Storage Warning</span>
-                                    <span className="text-[10px] text-on-surface-variant">S3 Buckets</span>
-                                </div>
-                                <p className="text-body-sm font-medium">Institution media uploads exceeding daily quota.</p>
-                                <button className="mt-1 text-primary font-label-md self-start hover:underline">Manage Quotas</button>
-                            </div>
-                        </div>
-                    </section>
-
-                    {/* Activity Feed */}
-                    <section className="glass-card rounded-xl p-6">
-                        <h4 className="font-title-md text-title-md mb-6">Announcements & Feed</h4>
-                        <div className="space-y-6 relative before:content-[''] before:absolute before:left-3 before:top-2 before:bottom-2 before:w-[1px] before:bg-outline-variant/30">
-                            <div className="relative pl-8">
-                                <div className="absolute left-0 top-1 w-6 h-6 bg-primary-container/20 rounded-full flex items-center justify-center">
-                                    <span className="material-symbols-outlined text-primary text-[14px]">campaign</span>
-                                </div>
-                                <p className="font-body-sm font-medium">New institution onboarded: Stanford University</p>
-                                <span className="text-[10px] text-on-surface-variant">2 hours ago • Partnerships</span>
-                            </div>
-                            <div className="relative pl-8">
-                                <div className="absolute left-0 top-1 w-6 h-6 bg-secondary-container/20 rounded-full flex items-center justify-center">
-                                    <span className="material-symbols-outlined text-secondary text-[14px]">forum</span>
-                                </div>
-                                <p className="font-body-sm font-medium">Research Discussion: "AI in Pedagogy" hits 1k replies</p>
-                                <span className="text-[10px] text-on-surface-variant">5 hours ago • Social</span>
-                            </div>
-                            <div className="relative pl-8">
-                                <div className="absolute left-0 top-1 w-6 h-6 bg-tertiary-container/20 rounded-full flex items-center justify-center">
-                                    <span className="material-symbols-outlined text-tertiary text-[14px]">security</span>
-                                </div>
-                                <p className="font-body-sm font-medium">System patch v4.2.1 deployed successfully</p>
-                                <span className="text-[10px] text-on-surface-variant">Yesterday • Tech Ops</span>
-                            </div>
-                        </div>
-                        <button className="w-full mt-6 py-2 text-center border border-outline-variant/30 rounded-lg text-on-surface-variant font-label-md hover:bg-surface-container-low transition-colors">
-                            View All Activity
-                        </button>
-                    </section>
-
-                    {/* Global Reach Map */}
-                    <section className="glass-card rounded-xl overflow-hidden h-48 relative">
-                        <div 
-                            className="absolute inset-0 bg-cover bg-center grayscale opacity-50" 
-                            style={{ backgroundImage: 'url("https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=800&auto=format&fit=crop")' }}
-                        ></div>
-                        <div className="absolute inset-0 bg-gradient-to-t from-surface-container-lowest to-transparent flex flex-col justify-end p-4">
-                            <h5 className="font-label-md text-label-md font-bold uppercase text-primary">Global Reach</h5>
-                            <p className="text-[10px] text-on-surface-variant">Real-time node distribution</p>
-                        </div>
-                    </section>
-                </div>
+                    </div>
+                ))}
             </div>
 
-            {/* Footer Meta Info */}
-            <footer className="mt-8 py-6 border-t border-outline-variant/10 flex flex-col md:flex-row justify-between items-center gap-4">
-                <div className="flex items-center gap-4 text-on-surface-variant">
-                    <span className="font-label-md text-label-md">© 2026 Academic Nexus v9.4.2</span>
-                    <a className="font-label-md text-label-md hover:text-primary underline-offset-4 hover:underline" href="#">Documentation</a>
-                    <a className="font-label-md text-label-md hover:text-primary underline-offset-4 hover:underline" href="#">Privacy Policy</a>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div className="lg:col-span-2">
+                    <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+                        <div className="px-5 py-4 border-b border-gray-200 flex justify-between items-center">
+                            <h2 className="font-semibold text-gray-900">Quick Actions</h2>
+                            <span className="text-xs text-gray-500">Manage the platform</span>
+                        </div>
+                        <div className="p-5 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            {actions.map((action) => (
+                                <Link
+                                    key={action.name}
+                                    href={route(action.href)}
+                                    className="flex items-center gap-3 p-3 rounded-lg border border-gray-200 hover:border-indigo-300 hover:bg-indigo-50/50 transition-colors"
+                                >
+                                    <div className={`w-10 h-10 rounded-lg flex items-center justify-center text-base ${action.color}`}>
+                                        <i className={`fa-solid ${action.icon}`}></i>
+                                    </div>
+                                    <div className="min-w-0">
+                                        <p className="text-sm font-medium text-gray-900">{action.name}</p>
+                                        <p className="text-xs text-gray-500 truncate">{action.description}</p>
+                                    </div>
+                                </Link>
+                            ))}
+                        </div>
+                    </div>
                 </div>
-                <div className="flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
-                    <span className="font-label-md text-label-md text-on-surface-variant">Server Status: High Performance</span>
+
+                <div className="bg-white rounded-xl border border-gray-200 p-5">
+                    <h2 className="font-semibold text-gray-900 mb-4">Grievances</h2>
+                    <div className="space-y-3">
+                        <Link href={route('admin.grievances.index')} className="flex justify-between items-center p-3 rounded-lg bg-gray-50 hover:bg-indigo-50 transition-colors">
+                            <span className="text-sm text-gray-600">Total</span>
+                            <span className="font-bold text-gray-900">{stats?.grievances || 0}</span>
+                        </Link>
+                        <Link href={route('admin.grievances.index')} className="flex justify-between items-center p-3 rounded-lg bg-red-50 hover:bg-red-100 transition-colors">
+                            <span className="text-sm text-red-600">Open</span>
+                            <span className="font-bold text-red-600">{stats?.open_grievances || 0}</span>
+                        </Link>
+                        <Link href={route('admin.grievances.index')} className="flex justify-between items-center p-3 rounded-lg bg-emerald-50 hover:bg-emerald-100 transition-colors">
+                            <span className="text-sm text-emerald-600">Resolved</span>
+                            <span className="font-bold text-emerald-600">{stats?.resolved_grievances || 0}</span>
+                        </Link>
+                        <Link href={route('admin.grievances.index')} className="flex justify-between items-center p-3 rounded-lg bg-amber-50 hover:bg-amber-100 transition-colors">
+                            <span className="text-sm text-amber-600">Critical</span>
+                            <span className="font-bold text-amber-600">{stats?.critical_grievances || 0}</span>
+                        </Link>
+                    </div>
                 </div>
-            </footer>
+            </div>
         </div>
     );
 }

@@ -27,9 +27,9 @@ export default function InstitutionAdminSidebar({ activeItem = '' }) {
             </div>
             <nav className="flex-1 px-2 space-y-1 overflow-y-auto custom-scrollbar">
                 <Link
-                    href={safeRoute('dashboard', '/dashboard')}
+                    href={safeRoute('admin.dashboard', '/admin')}
                     className={`flex items-center gap-4 px-4 py-2 transition-colors duration-200 ease-in-out font-body-sm text-body-sm ${
-                        isActive('/dashboard')
+                        isActive('/admin') && !isActive('/admin/') && url === '/admin'
                             ? 'text-primary font-bold border-r-4 border-primary'
                             : 'text-on-surface-variant hover:bg-surface-container-low'
                     }`}
@@ -38,40 +38,34 @@ export default function InstitutionAdminSidebar({ activeItem = '' }) {
                     Dashboard
                 </Link>
                 <Link
-                    href={safeRoute('admin.institutions', '/admin/institutions')}
+                    href={safeRoute('admin.enrollments.index', '/admin/enrollments')}
                     className={`flex items-center gap-4 px-4 py-2 transition-colors duration-200 ease-in-out font-body-sm text-body-sm ${
-                        isActive('/admin/institutions') || activeItem === 'Institution'
+                        isActive('/admin/enrollments') || activeItem === 'Enrollments'
                             ? 'text-primary font-bold border-r-4 border-primary'
                             : 'text-on-surface-variant hover:bg-surface-container-low'
                     }`}
-                >
-                    <span className="material-symbols-outlined">domain</span>
-                    Institution
-                </Link>
-                <Link
-                    href="#"
-                    className="flex items-center gap-4 px-4 py-2 text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200 ease-in-out font-body-sm text-body-sm"
-                >
-                    <span className="material-symbols-outlined">school</span>
-                    Teachers
-                </Link>
-                <Link
-                    href="#"
-                    className="flex items-center gap-4 px-4 py-2 text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200 ease-in-out font-body-sm text-body-sm"
                 >
                     <span className="material-symbols-outlined">group</span>
                     Students
                 </Link>
                 <Link
-                    href="#"
-                    className="flex items-center gap-4 px-4 py-2 text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200 ease-in-out font-body-sm text-body-sm"
+                    href={safeRoute('admin.semesters.index', '/admin/semesters')}
+                    className={`flex items-center gap-4 px-4 py-2 transition-colors duration-200 ease-in-out font-body-sm text-body-sm ${
+                        isActive('/admin/semesters') || activeItem === 'Semesters'
+                            ? 'text-primary font-bold border-r-4 border-primary'
+                            : 'text-on-surface-variant hover:bg-surface-container-low'
+                    }`}
                 >
                     <span className="material-symbols-outlined">event_repeat</span>
                     Semesters
                 </Link>
                 <Link
-                    href="#"
-                    className="flex items-center gap-4 px-4 py-2 text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200 ease-in-out font-body-sm text-body-sm"
+                    href={safeRoute('admin.subjects.index', '/admin/subjects')}
+                    className={`flex items-center gap-4 px-4 py-2 transition-colors duration-200 ease-in-out font-body-sm text-body-sm ${
+                        isActive('/admin/subjects') || activeItem === 'Subjects'
+                            ? 'text-primary font-bold border-r-4 border-primary'
+                            : 'text-on-surface-variant hover:bg-surface-container-low'
+                    }`}
                 >
                     <span className="material-symbols-outlined">book</span>
                     Subjects
@@ -153,20 +147,7 @@ export default function InstitutionAdminSidebar({ activeItem = '' }) {
                     <span className="material-symbols-outlined">handshake</span>
                     Mentorship
                 </Link>
-                <Link
-                    href="#"
-                    className="flex items-center gap-4 px-4 py-2 text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200 ease-in-out font-body-sm text-body-sm"
-                >
-                    <span className="material-symbols-outlined">analytics</span>
-                    Analytics
-                </Link>
-                <Link
-                    href="#"
-                    className="flex items-center gap-4 px-4 py-2 text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200 ease-in-out font-body-sm text-body-sm"
-                >
-                    <span className="material-symbols-outlined">calendar_today</span>
-                    Calendar
-                </Link>
+
                 <Link
                     href={safeRoute('announcements.index', '/announcements')}
                     className={`flex items-center gap-4 px-4 py-2 transition-colors duration-200 ease-in-out font-body-sm text-body-sm ${

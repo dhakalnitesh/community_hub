@@ -41,7 +41,7 @@ export default function Board({ auth, openRequests, topMentors }) {
                                         <div>
                                             <h4 className="font-semibold text-gray-900">{req.topic}</h4>
                                             <p className="text-sm text-gray-500 mt-1 flex items-center gap-1">
-                                                Requested by <span className="bg-gray-100 px-2 py-0.5 rounded font-mono text-xs">{req.discussion?.anonymous_name || 'AnonymousStudent'}</span>
+                                                Requested by <span className="bg-gray-100 px-2 py-0.5 rounded font-mono text-xs">{req.discussion?.author_name || 'AnonymousStudent'}</span>
                                             </p>
                                         </div>
                                         <div className="mt-4 sm:mt-0 flex gap-2">

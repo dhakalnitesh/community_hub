@@ -16,7 +16,9 @@ class GrievanceController extends Controller
         $query = Grievance::with(['institution', 'category', 'assignedUser', 'semester', 'subject'])
             ->whereNull('deleted_at');
 
-        if ($request->filled('institution_id')) {
+        if (auth()->user()->isInstitutionAdmin()) {
+            $query->whereIn('institution_id', auth()->user()->institutions()->pluck('institutions.id'));
+        } elseif ($request->filled('institution_id')) {
             $query->where('institution_id', $request->institution_id);
         }
 

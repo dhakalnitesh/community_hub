@@ -1,437 +1,122 @@
-import ApplicationLogo from '@/Components/ApplicationLogo';
-import Dropdown from '@/Components/Dropdown';
-import NavLink from '@/Components/NavLink';
-import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
-import SuperAdminSidebar from '@/Components/SuperAdminSidebar';
-import StudentSidebar from '@/Components/StudentSidebar';
-import TeacherSidebar from '@/Components/TeacherSidebar';
-import InstitutionAdminSidebar from '@/Components/InstitutionAdminSidebar';
-import NotificationBell from '@/Components/NotificationBell';
-import { Link, usePage } from '@inertiajs/react';
+import { useEffect, useState } from 'react';
+import { usePage } from '@inertiajs/react';
 
-import { useState } from 'react';
+import Navbar from '@/Components/Layout/Navbar';
+import Sidebar from '@/Components/Layout/Sidebar';
+import Footer from '@/Components/Layout/Footer';
+import FlashToast from '@/Components/Layout/FlashToast';
+import sidebarConfig from '@/Components/Layout/SidebarConfig';
+
+const NAVBAR_HEIGHT = 64;
+const SIDEBAR_EXPANDED = 256;
+const SIDEBAR_COLLAPSED = 64;
 
 export default function AuthenticatedLayout({ header, children }) {
     const user = usePage().props.auth.user;
+    const role = user?.role || 'student';
 
-    const [showingNavigationDropdown, setShowingNavigationDropdown] =
-        useState(false);
+    const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+    const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+    const [windowWidth, setWindowWidth] = useState(
+        typeof window !== 'undefined' ? window.innerWidth : 1024,
+    );
 
-    if (user?.role === 'super_admin') {
-        return (
-            <div className="flex min-h-screen text-on-surface font-body-md overflow-hidden bg-background">
-                <SuperAdminSidebar />
-                <main className="ml-64 flex-1 flex flex-col h-screen overflow-y-auto scroll-smooth">
-                    {/* TopNavBar */}
-                    <header className="sticky top-0 z-40 flex justify-between items-center px-6 py-2 w-full bg-surface-container-lowest border-b border-outline-variant/10">
-                        <div className="flex items-center gap-6">
-                            <div className="relative w-80">
-                                <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
-                                <input className="w-full bg-surface-container-low border-none rounded-full py-2 pl-10 pr-4 text-body-sm focus:ring-2 focus:ring-primary/20 transition-all" placeholder="Search research, students, or data..." type="text" />
+    const isMobile = windowWidth < 1024;
+
+    const toggleSidebar = () => {
+        if (isMobile) {
+            setMobileSidebarOpen((prev) => !prev);
+        } else {
+            setSidebarCollapsed((prev) => !prev);
+        }
+    };
+
+    const closeMobileSidebar = () => setMobileSidebarOpen(false);
+
+    useEffect(() => {
+        document.body.style.overflow = mobileSidebarOpen && isMobile ? 'hidden' : '';
+        return () => {
+            document.body.style.overflow = '';
+        };
+    }, [mobileSidebarOpen, isMobile]);
+
+    useEffect(() => {
+        const handleResize = () => {
+            const width = window.innerWidth;
+            setWindowWidth(width);
+            if (width >= 1024) {
+                setMobileSidebarOpen(false);
+            } else {
+                setSidebarCollapsed(false);
+            }
+        };
+
+        const handleEscape = (e) => {
+            if (e.key === 'Escape') setMobileSidebarOpen(false);
+        };
+
+        window.addEventListener('resize', handleResize);
+        document.addEventListener('keydown', handleEscape);
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+            document.removeEventListener('keydown', handleEscape);
+        };
+    }, []);
+
+    const sidebarWidth = isMobile ? 0 : sidebarCollapsed ? SIDEBAR_COLLAPSED : SIDEBAR_EXPANDED;
+    const config = sidebarConfig[role] || [];
+
+    return (
+        <div className="min-h-screen bg-gray-50 font-sans">
+            <Navbar
+                collapsed={sidebarCollapsed}
+                mobileOpen={mobileSidebarOpen}
+                onToggleSidebar={toggleSidebar}
+            />
+
+            <Sidebar
+                config={config}
+                collapsed={sidebarCollapsed}
+                isMobile={isMobile}
+                mobileOpen={mobileSidebarOpen}
+                onClose={closeMobileSidebar}
+                onExpand={() => setSidebarCollapsed(false)}
+            />
+
+            {mobileSidebarOpen && isMobile && (
+                <div
+                    className="fixed inset-0 z-30 bg-black/40 lg:hidden"
+                    onClick={closeMobileSidebar}
+                />
+            )}
+
+            <FlashToast />
+
+            <div
+                className="flex min-h-screen flex-col transition-all duration-300 ease-in-out"
+                style={{
+                    paddingTop: `${NAVBAR_HEIGHT}px`,
+                    paddingLeft: `${sidebarWidth}px`,
+                }}
+            >
+                <main className="flex-1">
+                    <div className="p-4 sm:p-6">
+                        {header && (
+                            <div className="mb-6 flex items-center justify-between gap-4">
+                                {typeof header === 'string' ? (
+                                    <h1 className="text-2xl font-bold text-slate-800">{header}</h1>
+                                ) : (
+                                    header
+                                )}
                             </div>
-                        </div>
-                        <div className="flex items-center gap-4">
-                            <NotificationBell />
-                            <button className="p-2 rounded-full hover:bg-surface-container-low transition-colors">
-                                <span className="material-symbols-outlined text-on-surface-variant">help</span>
-                            </button>
-                            <div className="h-8 w-[1px] bg-outline-variant/30 mx-1"></div>
-                            <button className="flex items-center gap-1 px-4 py-1.5 bg-primary text-white rounded-full font-label-md hover:opacity-90 transition-opacity">
-                                <span className="material-symbols-outlined text-[18px]">add</span>
-                                New Entry
-                            </button>
-                            <div className="flex items-center gap-2 cursor-pointer group ml-2">
-                                <Dropdown>
-                                    <Dropdown.Trigger>
-                                        <button className="flex items-center gap-3 focus:outline-none">
-                                            <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white ring-2 ring-primary uppercase font-bold text-lg">
-                                                {user?.name?.charAt(0) || 'A'}
-                                            </div>
-                                        </button>
-                                    </Dropdown.Trigger>
-                                    <Dropdown.Content align="right">
-                                        <Dropdown.Link href={route('profile.edit')}>Profile Settings</Dropdown.Link>
-                                        <Dropdown.Link href={route('logout')} method="post" as="button" onClick={(e) => { if (!confirm('Do you want to logout?')) e.preventDefault(); }}>Log Out</Dropdown.Link>
-                                    </Dropdown.Content>
-                                </Dropdown>
-                            </div>
-                        </div>
-                    </header>
-                    
-                    {/* Content Body */}
-                    <div className="flex-1 w-full">
+                        )}
                         {children}
                     </div>
                 </main>
+
+                <Footer />
             </div>
-        );
-    }
-
-    if (user?.role === 'student') {
-        return (
-            <div className="bg-background text-on-background font-body-md overflow-hidden flex h-screen">
-                <StudentSidebar />
-                <div className="flex-1 ml-72 h-screen overflow-y-auto scroll-smooth">
-                    <header className="sticky top-0 z-40 bg-background flex justify-between items-center px-margin-desktop py-6 max-w-container-max mx-auto">
-                        <div>
-                            {typeof header === 'string' ? (
-                                <h2 className="font-headline-md text-headline-md text-primary font-bold">{header}</h2>
-                            ) : (
-                                header || <h2 className="font-headline-md text-headline-md text-primary font-bold">LMS Dashboard</h2>
-                            )}
-                        </div>
-                        <div className="flex items-center gap-6">
-                            <div className="relative hidden lg:block w-80">
-                                <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">search</span>
-                                <input className="w-full pl-10 pr-4 py-2 bg-white border border-outline-variant rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent text-body-md" placeholder="Search courses, notes..." type="text" />
-                            </div>
-                            <div className="flex items-center gap-4">
-                                <NotificationBell />
-                                <div className="flex items-center gap-3 pl-4 border-l border-outline-variant">
-                                    <Dropdown>
-                                        <Dropdown.Trigger>
-                                            <button className="flex items-center gap-3 focus:outline-none">
-                                                <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white ring-2 ring-primary uppercase font-bold text-lg">
-                                                    {user.name.charAt(0)}
-                                                </div>
-                                                <div className="hidden sm:block text-left">
-                                                    <p className="font-label-md text-label-md text-on-surface leading-tight">{user.name}</p>
-                                                    <p className="text-label-sm text-outline leading-tight">Student</p>
-                                                </div>
-                                            </button>
-                                        </Dropdown.Trigger>
-                                        <Dropdown.Content align="right">
-                                            <Dropdown.Link href={route('profile.edit')}>Profile</Dropdown.Link>
-                                            <Dropdown.Link href={route('logout')} method="post" as="button" onClick={(e) => { if (!confirm('Do you want to logout?')) e.preventDefault(); }}>Log Out</Dropdown.Link>
-                                        </Dropdown.Content>
-                                    </Dropdown>
-                                </div>
-                            </div>
-                        </div>
-                    </header>
-                    <main className="px-margin-desktop pb-20 max-w-container-max mx-auto">
-                        {children}
-                    </main>
-                </div>
-            </div>
-        );
-    }
-
-    if (user?.role === 'teacher') {
-        return (
-            <div className="bg-gray-50 text-gray-900 font-sans flex h-screen overflow-hidden">
-                <TeacherSidebar />
-                <div className="flex-1 flex flex-col h-screen ml-[260px]">
-                    <header className="h-16 bg-white border-b border-gray-200 px-8 flex justify-between items-center z-30 sticky top-0">
-                        <div className="flex-1 max-w-lg">
-                            <div className="relative group">
-                                <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-indigo-600 transition-colors text-[20px]">search</span>
-                                <input 
-                                    className="w-full bg-gray-50 border border-gray-200 hover:border-gray-300 focus:border-indigo-500 rounded-lg py-2 pl-10 pr-4 text-sm focus:ring-4 focus:ring-indigo-500/10 transition-all outline-none" 
-                                    placeholder="Search student, subject, or assignment..." 
-                                    type="text" 
-                                />
-                                <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1">
-                                    <kbd className="hidden sm:inline-block border border-gray-200 bg-white rounded px-2 text-[10px] font-semibold text-gray-400">Ctrl</kbd>
-                                    <kbd className="hidden sm:inline-block border border-gray-200 bg-white rounded px-2 text-[10px] font-semibold text-gray-400">K</kbd>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="flex items-center gap-4 pl-4">
-                            <NotificationBell />
-                        </div>
-                    </header>
-                    <main className="flex-1 overflow-y-auto bg-gray-50/50">
-                        {children}
-                    </main>
-                </div>
-            </div>
-        );
-    }
-
-    if (user?.role === 'institution_admin') {
-        return (
-            <div className="bg-background text-on-surface font-body-md overflow-hidden flex min-h-screen">
-                <InstitutionAdminSidebar />
-                <div className="flex-1 ml-64 flex flex-col h-screen overflow-y-auto scroll-smooth">
-                    {/* Top App Bar */}
-                    <header className="fixed top-0 right-0 w-[calc(100%-16rem)] h-16 bg-surface border-b border-outline-variant flex justify-between items-center px-6 z-40 shadow-sm">
-                        <div className="flex items-center gap-4 flex-1">
-                            <div className="relative w-96 focus-within:ring-2 focus-within:ring-primary rounded-lg transition-all duration-200">
-                                <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
-                                <input className="w-full bg-surface-container-low border-none rounded-lg pl-10 pr-4 py-2 font-body-sm focus:ring-0" placeholder="Search across Academic Nexus..." type="text" />
-                            </div>
-                        </div>
-                        <div className="flex items-center gap-6">
-                            <div className="flex items-center gap-4">
-                                <NotificationBell />
-                                <button className="w-10 h-10 rounded-full hover:bg-surface-container-low flex items-center justify-center transition-colors">
-                                    <span className="material-symbols-outlined">help_outline</span>
-                                </button>
-                            </div>
-                            <div className="flex items-center gap-4 border-l border-outline-variant pl-6 cursor-pointer group">
-                                <Dropdown>
-                                    <Dropdown.Trigger>
-                                        <button className="flex items-center gap-3 focus:outline-none">
-                                            <div className="text-right hidden sm:block">
-                                                <p className="font-label-md text-label-md text-on-surface leading-tight">{user.name}</p>
-                                                <p className="font-body-sm text-[12px] text-on-surface-variant">Institution Admin</p>
-                                            </div>
-                                            <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white ring-2 ring-primary uppercase font-bold text-lg">
-                                                {user.name.charAt(0)}
-                                            </div>
-                                        </button>
-                                    </Dropdown.Trigger>
-                                    <Dropdown.Content align="right">
-                                        <Dropdown.Link href={route('profile.edit')}>Profile Settings</Dropdown.Link>
-                                        <Dropdown.Link href={route('logout')} method="post" as="button" onClick={(e) => { if (!confirm('Do you want to logout?')) e.preventDefault(); }}>Log Out</Dropdown.Link>
-                                    </Dropdown.Content>
-                                </Dropdown>
-                            </div>
-                        </div>
-                    </header>
-                    <main className="flex-1 w-full bg-background relative">
-                        {children}
-                    </main>
-                </div>
-            </div>
-        );
-    }
-
-    return (
-        <div className="min-h-screen bg-gray-100">
-            <nav className="border-b border-gray-100 bg-white">
-                <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                    <div className="flex h-16 justify-between">
-                        <div className="flex">
-                            <div className="flex shrink-0 items-center">
-                                <Link href="/">
-                                    <ApplicationLogo className="block h-9 w-auto fill-current text-gray-800" />
-                                </Link>
-                            </div>
-
-                            <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                <NavLink
-                                    href={route('dashboard')}
-                                    active={route().current('dashboard')}
-                                >
-                                    Dashboard
-                                </NavLink>
-                                <NavLink
-                                    href={route('questions.index')}
-                                    active={route().current('questions.*')}
-                                >
-                                    Questions
-                                </NavLink>
-                                <NavLink
-                                    href={route('assignments.index')}
-                                    active={route().current('assignments.*')}
-                                >
-                                    Assignments
-                                </NavLink>
-                                <NavLink
-                                    href={route('resources.index')}
-                                    active={route().current('resources.*')}
-                                >
-                                    Resources
-                                </NavLink>
-                                <NavLink
-                                    href={route('announcements.index')}
-                                    active={route().current('announcements.*')}
-                                >
-                                    Announcements
-                                </NavLink>
-                                {user.role === 'institution_admin' && (
-                                    <NavLink
-                                        href={route('admin.dashboard')}
-                                        active={route().current('admin.*')}
-                                    >
-                                        Manage
-                                    </NavLink>
-                                )}
-                                {user.role === 'super_admin' && (
-                                    <NavLink
-                                        href={route('dashboard')}
-                                        active={route().current('admin.*')}
-                                    >
-                                        Admin
-                                    </NavLink>
-                                )}
-                            </div>
-                        </div>
-
-                        <div className="hidden sm:ms-6 sm:flex sm:items-center">
-                            <div className="relative ms-3">
-                                <Dropdown>
-                                    <Dropdown.Trigger>
-                                        <span className="inline-flex rounded-md">
-                                            <button
-                                                type="button"
-                                                className="inline-flex items-center rounded-md border border-transparent bg-white px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none"
-                                            >
-                                                {user.name}
-
-                                                <svg
-                                                    className="-me-0.5 ms-2 h-4 w-4"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    viewBox="0 0 20 20"
-                                                    fill="currentColor"
-                                                >
-                                                    <path
-                                                        fillRule="evenodd"
-                                                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                                        clipRule="evenodd"
-                                                    />
-                                                </svg>
-                                            </button>
-                                        </span>
-                                    </Dropdown.Trigger>
-
-                                    <Dropdown.Content>
-                                        <Dropdown.Link
-                                            href={route('profile.edit')}
-                                        >
-                                            Profile
-                                        </Dropdown.Link>
-                                        <Dropdown.Link
-                                            href={route('logout')}
-                                            method="post"
-                                            as="button"
-                                            onClick={(e) => { if (!confirm('Do you want to logout?')) e.preventDefault(); }}
-                                        >
-                                            Log Out
-                                        </Dropdown.Link>
-                                    </Dropdown.Content>
-                                </Dropdown>
-                            </div>
-                        </div>
-
-                        <div className="-me-2 flex items-center sm:hidden">
-                            <button
-                                onClick={() =>
-                                    setShowingNavigationDropdown(
-                                        (previousState) => !previousState,
-                                    )
-                                }
-                                className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 transition duration-150 ease-in-out hover:bg-gray-100 hover:text-gray-500 focus:bg-gray-100 focus:text-gray-500 focus:outline-none"
-                            >
-                                <svg
-                                    className="h-6 w-6"
-                                    stroke="currentColor"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        className={
-                                            !showingNavigationDropdown
-                                                ? 'inline-flex'
-                                                : 'hidden'
-                                        }
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="2"
-                                        d="M4 6h16M4 12h16M4 18h16"
-                                    />
-                                    <path
-                                        className={
-                                            showingNavigationDropdown
-                                                ? 'inline-flex'
-                                                : 'hidden'
-                                        }
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="2"
-                                        d="M6 18L18 6M6 6l12 12"
-                                    />
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <div
-                    className={
-                        (showingNavigationDropdown ? 'block' : 'hidden') +
-                        ' sm:hidden'
-                    }
-                >
-                    <div className="space-y-1 pb-3 pt-2">
-                        <ResponsiveNavLink
-                            href={route('dashboard')}
-                            active={route().current('dashboard')}
-                        >
-                            Dashboard
-                        </ResponsiveNavLink>
-                        <ResponsiveNavLink
-                            href={route('questions.index')}
-                            active={route().current('questions.*')}
-                        >
-                            Questions
-                        </ResponsiveNavLink>
-                        <ResponsiveNavLink
-                            href={route('assignments.index')}
-                            active={route().current('assignments.*')}
-                        >
-                            Assignments
-                        </ResponsiveNavLink>
-                        <ResponsiveNavLink
-                            href={route('resources.index')}
-                            active={route().current('resources.*')}
-                        >
-                            Resources
-                        </ResponsiveNavLink>
-                        <ResponsiveNavLink
-                            href={route('announcements.index')}
-                            active={route().current('announcements.*')}
-                        >
-                            Announcements
-                        </ResponsiveNavLink>
-                        {user.role === 'institution_admin' && (
-                            <ResponsiveNavLink
-                                href={route('admin.dashboard')}
-                                active={route().current('admin.*')}
-                            >
-                                Manage
-                            </ResponsiveNavLink>
-                        )}
-                    </div>
-
-                    <div className="border-t border-gray-200 pb-1 pt-4">
-                        <div className="px-4">
-                            <div className="text-base font-medium text-gray-800">
-                                {user.name}
-                            </div>
-                            <div className="text-sm font-medium text-gray-500">
-                                {user.email}
-                            </div>
-                        </div>
-
-                        <div className="mt-3 space-y-1">
-                            <ResponsiveNavLink href={route('profile.edit')}>
-                                Profile
-                            </ResponsiveNavLink>
-                            <ResponsiveNavLink
-                                method="post"
-                                href={route('logout')}
-                                as="button"
-                                onClick={(e) => { if (!confirm('Do you want to logout?')) e.preventDefault(); }}
-                            >
-                                Log Out
-                            </ResponsiveNavLink>
-                        </div>
-                    </div>
-                </div>
-            </nav>
-
-            {header && (
-                <header className="bg-white shadow">
-                    <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-                        {header}
-                    </div>
-                </header>
-            )}
-
-            <main>{children}</main>
         </div>
     );
 }
