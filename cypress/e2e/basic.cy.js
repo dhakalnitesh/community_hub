@@ -1,7 +1,8 @@
 describe('EduVoice System Tests', () => {
   it('loads the homepage successfully', () => {
     cy.visit('/')
-    cy.contains('EduVoice') // Adjust depending on actual homepage content
+    cy.contains('Backbenchers')
+    cy.contains('Where Backbenchers Turn Ideas Into Breakthroughs')
   })
 
   it('can navigate to login', () => {

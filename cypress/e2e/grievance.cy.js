@@ -6,14 +6,19 @@ describe('Grievance Submission Flow', () => {
   })
 
   it('displays the grievance submission form', () => {
-    cy.contains('Submit Grievance').should('be.visible')
+    cy.contains('Submit a Grievance').should('be.visible')
     cy.get('select').first().should('exist') // Institution select
     cy.get('input[type="text"]').should('exist') // Title input
   })
 
-  it('validates required fields on first step', () => {
-    cy.contains('Next Step').click()
-    cy.get('input:invalid').should('have.length.at.least', 1)
+  it('keeps Next Step disabled until required fields are filled', () => {
+    cy.contains('Next Step').should('be.disabled')
+
+    cy.get('select').eq(0).select(1) // First institution
+    cy.get('select').eq(1).select(1) // First category
+    cy.get('input[type="text"]').type('Test Grievance Issue')
+
+    cy.contains('Next Step').should('be.enabled')
   })
 
   it('completes the first step and proceeds to second step', () => {

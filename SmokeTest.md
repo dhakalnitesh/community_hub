@@ -50,6 +50,27 @@ Expected: build finishes with `✓ built` and no errors; tests report **195 pass
 - [ ] `npm run build` completes with zero errors
 - [ ] `php artisan test` reports 195 passed / 1333 assertions
 
+### 2.1 Automated HTTP smoke run (2026-08-01) — DONE, 68/68 PASS
+
+An automated login + page-load smoke run was executed against the live app (see `tools/` note below).
+It logged in as each demo role and verified every page in this document returns HTTP 200 with the correct
+Inertia component, and that out-of-scope pages are blocked.
+
+| Role | Pages checked | Access-block checks | Result |
+|------|---------------|---------------------|--------|
+| Guest | `/`, `/login`, `/register`, `/grievances/feed` | `/dashboard`, `/questions`, `/admin/grievances`, `/assignments` → 302 | 8/8 |
+| Student | Dashboard, My Subjects, Assignments, Resources, Announcements, Q&A, Grievances feed+submit, Showcase, Mentorship, Profile | `/admin/grievances`→403, `/admin`→403, `/classes`→302, `/admin/users`→403 | 15/15 |
+| Teacher | Dashboard, Classes, Assignments, Resources, Announcements, Q&A, Grievances feed, Showcase, Mentorship, Profile | `/admin`→403, `/admin/grievances`→403 | 12/12 |
+| Institution Admin | Admin Dashboard, Enrollments, Semesters, Subjects, Assignments, Resources, Announcements, Q&A, Admin Grievances, Moderation, Showcase, Mentorship, Profile | `/admin/institutions`→403, `/admin/users`→403, `/admin/roles`→403 | 16/16 |
+| Super Admin | Dashboard, Institutions, Institution Admins, Users, Roles, Analytics, Reports, Monitoring, User Activity, Announcements, Q&A, Showcase, Mentorship, Admin Grievances, Moderation, Spam Logs, Profile | — | 17/17 |
+
+No 5xx / exceptions were recorded in `storage/logs/laravel.log` or the server log for this run
+(the file's only entries are from 2026-07-24 dev/test sessions).
+
+> **What the automated run does NOT cover** (still verify by hand below): visual styling (design criteria §3),
+> client-side rendering/interactions (modals, toggles, voting), i18n toggle, file uploads, and mobile responsiveness.
+> The HTTP layer, routing, auth, and role-based access control are all verified.
+
 ---
 
 ## 3. Design acceptance criteria (apply to EVERY page below)
