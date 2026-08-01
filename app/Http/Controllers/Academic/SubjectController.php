@@ -78,9 +78,20 @@ class SubjectController extends Controller
     {
         $this->authorize('update', $subject);
 
+        $user = Auth::user();
+        $teacherQuery = User::where('role', 'teacher');
+
+        if ($user->isInstitutionAdmin()) {
+            $institutionIds = $user->institutions()->pluck('institutions.id');
+            $teacherQuery->whereHas('institutions', function ($q) use ($institutionIds) {
+                $q->whereIn('institutions.id', $institutionIds);
+            });
+        }
+
         return inertia('Admin/Subjects/Edit', [
-            'subject' => $subject->load('semester.institution'),
+            'subject' => $subject->load(['semester.institution', 'teachers']),
             'semesters' => \App\Models\Academic\Semester::with('institution')->get(),
+            'teachers' => $teacherQuery->orderBy('name')->get(['id', 'name', 'email']),
         ]);
     }
 

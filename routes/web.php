@@ -55,6 +55,7 @@ Route::middleware(['auth', 'role:super_admin'])->group(function () {
     Route::get('/admin/users', [UserController::class, 'index'])->name('admin.users');
     Route::get('/admin/useractivity', [\App\Http\Controllers\Admin\UserActivityController::class, 'index'])->name('admin.useractivity');
     Route::get('/admin/institutions', [\App\Http\Controllers\Admin\InstitutionController::class, 'index'])->name('admin.institutions');
+    Route::get('/admin/institutions/create', [\App\Http\Controllers\Admin\InstitutionController::class, 'create'])->name('admin.institutions.create');
     Route::post('/admin/institutions', [\App\Http\Controllers\Admin\InstitutionController::class, 'store'])->name('admin.institutions.store');
 
     Route::get('/admin/institution_admins', [\App\Http\Controllers\Admin\SuperAdminPageController::class, 'institutionAdmins'])->name('admin.institution_admins');

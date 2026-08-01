@@ -2,28 +2,28 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, Link, router } from '@inertiajs/react';
 import { formatDistanceToNow } from 'date-fns';
 
-export default function NotificationsIndex({ auth, notifications, filters }) {
+export default function NotificationsIndex({ notifications, filters }) {
     const { type, status } = filters;
 
     const getIcon = (itemType) => {
-        if (itemType.startsWith('assignment')) return 'assignment';
-        if (itemType.startsWith('question') || itemType.startsWith('answer')) return 'forum';
-        if (itemType.startsWith('resource')) return 'folder_open';
-        if (itemType.startsWith('announcement')) return 'campaign';
-        return 'notifications';
+        if (itemType.startsWith('assignment')) return 'fa-clipboard-list';
+        if (itemType.startsWith('question') || itemType.startsWith('answer')) return 'fa-comments';
+        if (itemType.startsWith('resource')) return 'fa-folder-open';
+        if (itemType.startsWith('announcement')) return 'fa-bullhorn';
+        return 'fa-bell';
     };
 
     const getIconColor = (itemType) => {
-        if (itemType.startsWith('assignment')) return 'text-primary bg-primary/10';
-        if (itemType.startsWith('question') || itemType.startsWith('answer')) return 'text-secondary bg-secondary/10';
-        if (itemType.startsWith('resource')) return 'text-success bg-success/10';
-        if (itemType.startsWith('announcement')) return 'text-error bg-error/10';
-        return 'text-on-surface-variant bg-surface-container-high';
+        if (itemType.startsWith('assignment')) return 'bg-indigo-50 text-indigo-600';
+        if (itemType.startsWith('question') || itemType.startsWith('answer')) return 'bg-emerald-50 text-emerald-600';
+        if (itemType.startsWith('resource')) return 'bg-sky-50 text-sky-600';
+        if (itemType.startsWith('announcement')) return 'bg-red-50 text-red-600';
+        return 'bg-gray-100 text-gray-500';
     };
 
     const handleFilter = (filterType, filterValue) => {
         const query = { ...filters };
-        
+
         if (filterValue) {
             query[filterType] = filterValue;
         } else {
@@ -48,87 +48,87 @@ export default function NotificationsIndex({ auth, notifications, filters }) {
         <AuthenticatedLayout header="Notifications">
             <Head title="Notifications" />
 
-            <div className="max-w-4xl mx-auto py-8">
-                <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+            <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8">
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
                     <div>
-                        <h1 className="text-3xl font-bold text-on-surface tracking-tight mb-2">Notification Center</h1>
-                        <p className="text-body-md text-on-surface-variant">Stay updated with your latest academic activities.</p>
+                        <h1 className="text-2xl font-bold text-gray-900">Notification Center</h1>
+                        <p className="text-sm text-gray-500 mt-1">Stay updated with your latest academic activities.</p>
                     </div>
-                    
+
                     <Link
                         href={route('notifications.read_all')}
                         method="post"
                         as="button"
-                        className="px-4 py-2 bg-surface-container-high hover:bg-surface-container-highest text-on-surface font-label-md rounded-lg transition-colors flex items-center gap-2"
+                        className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium rounded-lg transition-colors"
                     >
-                        <span className="material-symbols-outlined text-[20px]">done_all</span>
+                        <i className="fa-solid fa-check-double text-xs"></i>
                         Mark all as read
                     </Link>
                 </div>
 
-                {/* Filters */}
-                <div className="bg-surface border border-outline-variant rounded-xl p-4 mb-6 flex flex-wrap gap-4 items-center">
-                    <div className="flex bg-surface-container-low rounded-lg p-1">
+                <div className="bg-white border border-gray-200 rounded-xl p-4 mb-6 flex flex-wrap gap-4 items-center">
+                    <div className="flex bg-gray-100 rounded-lg p-1">
                         <button
                             onClick={() => handleFilter('status', null)}
-                            className={`px-4 py-1.5 rounded-md font-label-sm transition-colors ${!status ? 'bg-surface shadow-sm text-on-surface' : 'text-on-surface-variant hover:text-on-surface'}`}
+                            className={`px-4 py-1.5 rounded-md text-sm transition-colors ${!status ? 'bg-white shadow-sm text-gray-900 font-medium' : 'text-gray-500 hover:text-gray-900'}`}
                         >
                             All
                         </button>
                         <button
                             onClick={() => handleFilter('status', 'unread')}
-                            className={`px-4 py-1.5 rounded-md font-label-sm transition-colors ${status === 'unread' ? 'bg-surface shadow-sm text-on-surface' : 'text-on-surface-variant hover:text-on-surface'}`}
+                            className={`px-4 py-1.5 rounded-md text-sm transition-colors ${status === 'unread' ? 'bg-white shadow-sm text-gray-900 font-medium' : 'text-gray-500 hover:text-gray-900'}`}
                         >
                             Unread
                         </button>
                     </div>
 
-                    <div className="h-6 w-[1px] bg-outline-variant"></div>
+                    <div className="h-6 w-px bg-gray-200"></div>
 
                     <div className="flex flex-wrap gap-2">
                         <button
                             onClick={() => handleFilter('type', null)}
-                            className={`px-3 py-1.5 rounded-full font-label-sm border transition-colors ${!type ? 'bg-primary text-white border-primary' : 'bg-transparent border-outline-variant text-on-surface-variant hover:bg-surface-container-low'}`}
+                            className={`px-3 py-1.5 rounded-full text-xs border transition-colors ${!type ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white border-gray-200 text-gray-500 hover:bg-gray-50'}`}
                         >
                             All Types
                         </button>
                         <button
                             onClick={() => handleFilter('type', 'assignment.created')}
-                            className={`px-3 py-1.5 rounded-full font-label-sm border transition-colors ${type === 'assignment.created' ? 'bg-primary text-white border-primary' : 'bg-transparent border-outline-variant text-on-surface-variant hover:bg-surface-container-low'}`}
+                            className={`px-3 py-1.5 rounded-full text-xs border transition-colors ${type === 'assignment.created' ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white border-gray-200 text-gray-500 hover:bg-gray-50'}`}
                         >
                             Assignments
                         </button>
                         <button
                             onClick={() => handleFilter('type', 'question.posted')}
-                            className={`px-3 py-1.5 rounded-full font-label-sm border transition-colors ${type === 'question.posted' ? 'bg-primary text-white border-primary' : 'bg-transparent border-outline-variant text-on-surface-variant hover:bg-surface-container-low'}`}
+                            className={`px-3 py-1.5 rounded-full text-xs border transition-colors ${type === 'question.posted' ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white border-gray-200 text-gray-500 hover:bg-gray-50'}`}
                         >
                             Discussions
                         </button>
                         <button
                             onClick={() => handleFilter('type', 'resource.uploaded')}
-                            className={`px-3 py-1.5 rounded-full font-label-sm border transition-colors ${type === 'resource.uploaded' ? 'bg-primary text-white border-primary' : 'bg-transparent border-outline-variant text-on-surface-variant hover:bg-surface-container-low'}`}
+                            className={`px-3 py-1.5 rounded-full text-xs border transition-colors ${type === 'resource.uploaded' ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white border-gray-200 text-gray-500 hover:bg-gray-50'}`}
                         >
                             Resources
                         </button>
                         <button
                             onClick={() => handleFilter('type', 'announcement.published')}
-                            className={`px-3 py-1.5 rounded-full font-label-sm border transition-colors ${type === 'announcement.published' ? 'bg-primary text-white border-primary' : 'bg-transparent border-outline-variant text-on-surface-variant hover:bg-surface-container-low'}`}
+                            className={`px-3 py-1.5 rounded-full text-xs border transition-colors ${type === 'announcement.published' ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white border-gray-200 text-gray-500 hover:bg-gray-50'}`}
                         >
                             Announcements
                         </button>
                     </div>
                 </div>
 
-                {/* Notifications List */}
-                <div className="bg-surface border border-outline-variant rounded-xl overflow-hidden shadow-sm">
+                <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
                     {notifications.data.length === 0 ? (
-                        <div className="p-12 text-center text-on-surface-variant flex flex-col items-center">
-                            <span className="material-symbols-outlined text-6xl mb-4 opacity-30">notifications_off</span>
-                            <h3 className="text-title-lg font-bold text-on-surface mb-2">No notifications found</h3>
-                            <p className="text-body-md">You're completely caught up. Check back later for updates.</p>
+                        <div className="p-12 text-center text-gray-500 flex flex-col items-center">
+                            <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mb-4 text-gray-300">
+                                <i className="fa-solid fa-bell-slash text-3xl"></i>
+                            </div>
+                            <h3 className="text-lg font-bold text-gray-900 mb-2">No notifications found</h3>
+                            <p className="text-sm">You're completely caught up. Check back later for updates.</p>
                         </div>
                     ) : (
-                        <div className="divide-y divide-outline-variant/50">
+                        <div className="divide-y divide-gray-100">
                             {notifications.data.map((notification) => (
                                 <Link
                                     key={notification.id}
@@ -138,27 +138,27 @@ export default function NotificationsIndex({ auth, notifications, filters }) {
                                             await handleMarkAsRead(notification.id, e);
                                         }
                                     }}
-                                    className={`flex p-5 gap-4 hover:bg-surface-container-lowest transition-colors ${!notification.read_at ? 'bg-primary/5' : ''}`}
+                                    className={`flex p-5 gap-4 hover:bg-gray-50 transition-colors ${!notification.read_at ? 'bg-indigo-50/40' : ''}`}
                                 >
-                                    <div className={`shrink-0 w-12 h-12 rounded-full flex items-center justify-center ${getIconColor(notification.type)}`}>
-                                        <span className="material-symbols-outlined text-[24px]">{getIcon(notification.type)}</span>
+                                    <div className={`shrink-0 w-12 h-12 rounded-full flex items-center justify-center text-lg ${getIconColor(notification.type)}`}>
+                                        <i className={`fa-solid ${getIcon(notification.type)}`}></i>
                                     </div>
                                     <div className="flex-1 min-w-0">
                                         <div className="flex justify-between items-start mb-1 gap-4">
-                                            <h4 className={`text-title-md font-bold ${!notification.read_at ? 'text-on-surface' : 'text-on-surface-variant'}`}>
+                                            <h4 className={`font-semibold ${!notification.read_at ? 'text-gray-900' : 'text-gray-500'}`}>
                                                 {notification.title}
                                             </h4>
-                                            <span className="shrink-0 text-label-md text-outline">
+                                            <span className="shrink-0 text-xs text-gray-400">
                                                 {formatDistanceToNow(new Date(notification.created_at), { addSuffix: true })}
                                             </span>
                                         </div>
-                                        <p className={`text-body-md leading-relaxed ${!notification.read_at ? 'text-on-surface-variant' : 'text-outline'}`}>
+                                        <p className={`text-sm leading-relaxed ${!notification.read_at ? 'text-gray-600' : 'text-gray-400'}`}>
                                             {notification.message}
                                         </p>
                                     </div>
                                     {!notification.read_at && (
                                         <div className="shrink-0 self-center ml-2">
-                                            <div className="w-3 h-3 bg-primary rounded-full ring-4 ring-primary/20"></div>
+                                            <div className="w-2.5 h-2.5 bg-indigo-600 rounded-full ring-4 ring-indigo-100"></div>
                                         </div>
                                     )}
                                 </Link>
@@ -167,19 +167,18 @@ export default function NotificationsIndex({ auth, notifications, filters }) {
                     )}
                 </div>
 
-                {/* Pagination */}
                 {notifications.last_page > 1 && (
-                    <div className="mt-8 flex justify-center gap-2">
+                    <div className="mt-6 flex justify-center gap-1">
                         {notifications.links.map((link, index) => (
                             <Link
                                 key={index}
                                 href={link.url || '#'}
-                                className={`px-4 py-2 rounded-lg font-label-md transition-colors ${
-                                    link.active 
-                                        ? 'bg-primary text-white' 
-                                        : !link.url 
-                                            ? 'text-outline pointer-events-none' 
-                                            : 'bg-surface border border-outline-variant text-on-surface hover:bg-surface-container-low'
+                                className={`px-3 py-1.5 rounded-lg text-sm transition-colors ${
+                                    link.active
+                                        ? 'bg-indigo-600 text-white'
+                                        : !link.url
+                                          ? 'text-gray-300 pointer-events-none'
+                                          : 'bg-white border border-gray-200 text-gray-700 hover:bg-gray-50'
                                 }`}
                                 dangerouslySetInnerHTML={{ __html: link.label }}
                             />

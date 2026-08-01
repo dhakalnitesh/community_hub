@@ -39,6 +39,13 @@ class InstitutionController extends Controller
         ]);
     }
 
+    public function create(Request $request)
+    {
+        abort_if(!$request->user()->isSuperAdmin(), 403);
+
+        return Inertia::render('Admin/Institutions/Create');
+    }
+
     public function store(Request $request)
     {
         abort_if(!$request->user()->isSuperAdmin(), 403);

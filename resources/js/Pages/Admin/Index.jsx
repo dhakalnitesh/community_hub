@@ -1,110 +1,73 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, Link } from '@inertiajs/react';
-import { Users, BookOpen, Layers, GraduationCap, TrendingUp, Activity, Plus } from 'lucide-react';
 
 export default function AdminIndex({ stats, institution }) {
+    const metrics = [
+        { name: 'Total Students', value: stats.students, icon: 'fa-user-graduate', color: 'bg-blue-50 text-blue-600', href: null, sub: 'Active this semester' },
+        { name: 'Teachers', value: stats.teachers, icon: 'fa-chalkboard-user', color: 'bg-purple-50 text-purple-600', href: null },
+        { name: 'Semesters', value: stats.semesters, icon: 'fa-layer-group', color: 'bg-orange-50 text-orange-600', href: 'admin.semesters.index', sub: 'Manage Semesters' },
+        { name: 'Subjects', value: stats.subjects, icon: 'fa-book-open', color: 'bg-teal-50 text-teal-600', href: 'admin.subjects.index', sub: 'Manage Subjects' },
+    ];
+
     return (
         <AuthenticatedLayout>
             <Head title="Admin Dashboard" />
 
-            <div className="p-8 max-w-7xl mx-auto space-y-8">
-                {/* Header Section */}
-                <div className="flex justify-between items-end">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 space-y-8">
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
                     <div>
-                        <h1 className="text-3xl font-bold text-gray-900 tracking-tight">
+                        <h1 className="text-2xl font-bold text-gray-900 tracking-tight">
                             {institution ? `${institution.name} Overview` : 'Platform Administration'}
                         </h1>
-                        <p className="text-gray-500 mt-2 flex items-center gap-2">
-                            <Activity className="text-green-500" size={16} /> System is running smoothly
+                        <p className="text-sm text-gray-500 mt-1 flex items-center gap-2">
+                            <i className="fa-solid fa-circle-check text-green-500 text-xs"></i> System is running smoothly
                         </p>
                     </div>
                     <div className="flex gap-3">
-                        <Link href={route('admin.semesters.create')} className="px-4 py-2 bg-white border border-gray-200 text-gray-700 rounded-lg hover:bg-gray-50 transition shadow-sm font-medium flex items-center gap-2">
-                            <Plus size={18} /> New Semester
+                        <Link href={route('admin.semesters.create')} className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 text-gray-700 rounded-lg hover:bg-gray-50 transition font-medium text-sm">
+                            <i className="fa-solid fa-plus text-xs"></i> New Semester
                         </Link>
-                        <Link href={route('admin.subjects.create')} className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition shadow-sm font-medium flex items-center gap-2">
-                            <Plus size={18} /> New Subject
-                        </Link>
-                    </div>
-                </div>
-
-                {/* KPI Cards */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm relative overflow-hidden group hover:border-indigo-200 transition-all">
-                        <div className="absolute -right-6 -top-6 bg-blue-50 w-24 h-24 rounded-full group-hover:scale-110 transition-transform"></div>
-                        <div className="relative z-10 flex justify-between items-start">
-                            <div>
-                                <p className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-1">Total Students</p>
-                                <h3 className="text-4xl font-black text-gray-900">{stats.students}</h3>
-                            </div>
-                            <div className="w-12 h-12 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center">
-                                <Users size={24} />
-                            </div>
-                        </div>
-                        <div className="mt-4 flex items-center text-sm font-medium text-green-600 gap-1">
-                            <TrendingUp size={16} />
-                            <span>Active this semester</span>
-                        </div>
-                    </div>
-
-                    <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm relative overflow-hidden group hover:border-purple-200 transition-all">
-                        <div className="absolute -right-6 -top-6 bg-purple-50 w-24 h-24 rounded-full group-hover:scale-110 transition-transform"></div>
-                        <div className="relative z-10 flex justify-between items-start">
-                            <div>
-                                <p className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-1">Teachers</p>
-                                <h3 className="text-4xl font-black text-gray-900">{stats.teachers}</h3>
-                            </div>
-                            <div className="w-12 h-12 bg-purple-100 text-purple-600 rounded-xl flex items-center justify-center">
-                                <GraduationCap size={24} />
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm relative overflow-hidden group hover:border-orange-200 transition-all">
-                        <div className="absolute -right-6 -top-6 bg-orange-50 w-24 h-24 rounded-full group-hover:scale-110 transition-transform"></div>
-                        <div className="relative z-10 flex justify-between items-start">
-                            <div>
-                                <p className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-1">Semesters</p>
-                                <h3 className="text-4xl font-black text-gray-900">{stats.semesters}</h3>
-                            </div>
-                            <div className="w-12 h-12 bg-orange-100 text-orange-600 rounded-xl flex items-center justify-center">
-                                <Layers size={24} />
-                            </div>
-                        </div>
-                        <Link href={route('admin.semesters.index')} className="mt-4 inline-flex items-center text-sm font-semibold text-orange-600 hover:text-orange-700">
-                            Manage Semesters &rarr;
-                        </Link>
-                    </div>
-
-                    <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm relative overflow-hidden group hover:border-teal-200 transition-all">
-                        <div className="absolute -right-6 -top-6 bg-teal-50 w-24 h-24 rounded-full group-hover:scale-110 transition-transform"></div>
-                        <div className="relative z-10 flex justify-between items-start">
-                            <div>
-                                <p className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-1">Subjects</p>
-                                <h3 className="text-4xl font-black text-gray-900">{stats.subjects}</h3>
-                            </div>
-                            <div className="w-12 h-12 bg-teal-100 text-teal-600 rounded-xl flex items-center justify-center">
-                                <BookOpen size={24} />
-                            </div>
-                        </div>
-                        <Link href={route('admin.subjects.index')} className="mt-4 inline-flex items-center text-sm font-semibold text-teal-600 hover:text-teal-700">
-                            Manage Subjects &rarr;
+                        <Link href={route('admin.subjects.create')} className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition font-medium text-sm">
+                            <i className="fa-solid fa-plus text-xs"></i> New Subject
                         </Link>
                     </div>
                 </div>
 
-                {/* Content Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    {metrics.map((metric) => {
+                        const inner = (
+                            <>
+                                <div className={`w-11 h-11 rounded-lg flex items-center justify-center text-lg ${metric.color}`}>
+                                    <i className={`fa-solid ${metric.icon}`}></i>
+                                </div>
+                                <div className="min-w-0">
+                                    <p className="text-[10px] uppercase tracking-wider text-gray-500 font-medium">{metric.name}</p>
+                                    <p className="text-2xl font-bold text-gray-900 mt-1">{metric.value}</p>
+                                    {metric.sub && (
+                                        <p className="text-xs font-medium text-gray-500 mt-0.5">{metric.sub}</p>
+                                    )}
+                                </div>
+                            </>
+                        );
+                        const className = "bg-white rounded-xl p-5 border border-gray-200 hover:border-indigo-200 transition-all flex items-start gap-4";
+                        return metric.href ? (
+                            <Link key={metric.name} href={route(metric.href)} className={className}>{inner}</Link>
+                        ) : (
+                            <div key={metric.name} className={className}>{inner}</div>
+                        );
+                    })}
+                </div>
+
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    {/* Activity or Info Panel */}
-                    <div className="lg:col-span-2 bg-white border border-gray-200 rounded-2xl shadow-sm p-6">
+                    <div className="lg:col-span-2 bg-white border border-gray-200 rounded-xl p-6">
                         <h3 className="text-lg font-bold text-gray-900 mb-4">Institution Context</h3>
-                        <div className="bg-gray-50 rounded-xl p-6 border border-gray-100">
+                        <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
                             <p className="text-gray-600 leading-relaxed mb-4">
                                 This dashboard gives you a high-level overview of the academic structure. Use the quick action buttons to easily configure new semesters and subjects for your students.
                             </p>
                             <div className="flex gap-4">
-                                <Link href={route('admin.enrollments.index')} className="px-4 py-2 bg-white border border-gray-200 text-gray-700 rounded-lg shadow-sm hover:border-gray-300 font-medium text-sm transition">
-                                    Manage Enrollments
+                                <Link href={route('admin.enrollments.index')} className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 text-gray-700 rounded-lg shadow-sm hover:border-gray-300 font-medium text-sm transition">
+                                    <i className="fa-solid fa-user-graduate text-xs"></i> Manage Enrollments
                                 </Link>
                             </div>
                         </div>
